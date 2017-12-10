@@ -35,9 +35,9 @@ public class CadastroComposicao extends JDialog {
     private DefaultListModel dm1, dm2, dm3;
     private DB db = DB.getInstance();
     private Connection conn = db.getConnection();
-
-    private ArrayList<Vagao> vagoes = new ArrayList<>();
-    private ArrayList<Locomotiva> locomotivas = new ArrayList<>();
+    
+    private ArrayList<Vagao> vagoes = Vagao.getAll();
+    private ArrayList<Locomotiva> locomotivas = Locomotiva.getAll();
 
     private ArrayList<Locomotiva> locs_na_lista = new ArrayList<>();
     private ArrayList<Vagao> vags_na_lista = new ArrayList<>();
@@ -71,18 +71,19 @@ public class CadastroComposicao extends JDialog {
             int index = dl.getIndex();
 
             // Regras customizadas
-            if (line.contains("-")) {
+            if (line.contains("-")) { // É um vagão?
                 Vagao v = new Vagao(
-                        line.substring(0, 3),
-                        line.substring(4, 10),
-                        Integer.parseInt(line.substring(11, 12))
+                    line.substring(0, 3),
+                    line.substring(4, 10),
+                    Integer.parseInt(line.substring(11, 12))
                 );
                 vags_na_lista.add(v);
                 vags_na_lista.sort(v);
             } else {
-                if (locs_na_lista.size() > 2) {
+                if (locs_na_lista.size() > 2) { // Se for uma locomotiva, então há mais de 2?
                     JOptionPane.showMessageDialog(null, "A composição só pode ter 3 locomotivas!");
-                } else {
+                    
+                } else { // Se for possível, adiciona locomotiva
                     locs_na_lista.add(new Locomotiva(Integer.parseInt(line)));
                 }
             }
@@ -141,7 +142,7 @@ public class CadastroComposicao extends JDialog {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Teste");
+        setTitle("Cadastro de Composição");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 

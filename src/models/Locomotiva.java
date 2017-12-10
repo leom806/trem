@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Locomotiva implements DBObject, ElementoComposicao{
     
@@ -15,7 +17,7 @@ public class Locomotiva implements DBObject, ElementoComposicao{
     protected double comprimento;
     protected String descricao;
     
-    private Connection conn = DB.getInstance().getConnection();
+    private static Connection conn = DB.getInstance().getConnection();
     private Statement statement = null;
     private ResultSet set = null;
     private StringBuilder sb = new StringBuilder();
@@ -154,6 +156,24 @@ public class Locomotiva implements DBObject, ElementoComposicao{
         this.comprimento = comprimento;
     }
     
-    
+    public static ArrayList<Locomotiva> getAll(){
+        ArrayList<Locomotiva> response = new ArrayList<>();
+        try {
+            ResultSet locs = conn.createStatement().executeQuery("SELECT * FROM locomotivas");
+            while(locs.next()){
+                response.add(new Locomotiva(
+                    locs.getInt("classe"),
+                    locs.getString("descricao"),
+                    locs.getDouble("pmr"),
+                    locs.getDouble("bitola"),
+                    locs.getDouble("comprimento")
+                ));
+            }
+            return response;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível ler as locomotivas.");
+        }
+        return null;
+    }
     
 }

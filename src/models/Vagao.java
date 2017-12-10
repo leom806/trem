@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Comparator;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -73,7 +74,7 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
     private final Helper helper = Helper.getInstance();
     
     
-    private Connection conn = DB.getInstance().getConnection();
+    private static Connection conn = DB.getInstance().getConnection();
     private Statement statement = null;
     private ResultSet set = null;
     private StringBuilder sb = new StringBuilder();
@@ -329,6 +330,22 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         this.proprietario = helper.getProprietario(id_proprietario);
     }
     
-    
+    public static ArrayList<Vagao> getAll(){
+        ArrayList<Vagao> response = new ArrayList<>();
+        try {
+            ResultSet vagoes = conn.createStatement().executeQuery("SELECT * FROM vagoes");
+            while(vagoes.next()){
+                response.add(new Vagao(
+                    vagoes.getString("letras"),
+                    vagoes.getString("id"),
+                    vagoes.getInt("digito")
+                ));
+            }
+            return response;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível ler os vagões.");
+        }
+        return null;
+    }
     
 }
