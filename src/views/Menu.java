@@ -104,7 +104,10 @@ public class Menu extends Window {
                    pBotoesL,
                    pBotoesC; // paineis de botoes
 
-    private static CellConstraints cc = new CellConstraints(); // pode deixar aqui ? momente
+    private static CellConstraints cc = new CellConstraints(); // pode.
+
+    // Resources
+    Icon home, vagao, locomotiva, composicao, rel, informacoes, pesquisar, config;
 
     private Menu() {
         initComp();
@@ -116,6 +119,22 @@ public class Menu extends Window {
     
     public static void deleteInstance(){
         instance = null;
+        System.gc();
+    }
+
+    public void loadResources(){
+        try{
+            home = new ImageIcon(getClass().getResource("../resources/images/home.png"));   
+            vagao = new ImageIcon(getClass().getResource("../resources/images/vagao.png"));
+            locomotiva = new ImageIcon(getClass().getResource("../resources/images/locomotiva.png"));
+            composicao = new ImageIcon(getClass().getResource("../resources/images/composicao.png"));
+            rel = new ImageIcon(getClass().getResource("../resources/images/form.png")); 
+            informacoes = new ImageIcon(getClass().getResource("../resources/images/informações.png")); 
+            pesquisar = new ImageIcon(getClass().getResource("../resources/images/pesquisar.png"));
+            config = new ImageIcon(getClass().getResource("../resources/images/configurações.png")); 
+        }catch(NullPointerException ex){
+            JOptionPane.showMessageDialog(null, "Não foi possível carregar as imagens.");
+        }
     }
     
     private void initComp() {
@@ -158,15 +177,8 @@ public class Menu extends Window {
     private void aba01() {
         panel1 = new JPanel(); // panel da aba 01
         panel1.setLayout(new BorderLayout()); // layout
-
-        Icon home = null;
-        try{
-            home = new ImageIcon(getClass().getResource("../resources/images/home.png")); // icone da aba                    
-            addTab(tab, panel1, "Home               ", home);// Fim da Aba 01 - Homes
-        }catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "Não foi possível carregar as imagens.");
-            Helper.getInstance().onExit();
-        }        
+    
+        addTab(tab, panel1, "Home               ", home);// Fim da Aba 01 - Homes
 
         // titulo da página incial
         JLabel titPagInicial = new JLabel("Página Inicial");
@@ -216,13 +228,12 @@ public class Menu extends Window {
         // adicionando ao panel1
         panel1.add(BorderLayout.NORTH, titPagInicial); // adicionando titulo no panel
         panel1.add(BorderLayout.CENTER, info); // Fim da Aba 01 - Home
-    }
+    } // Fim da Aba 01 - Home
 
     private void aba02() throws SQLException {
         panel2 = new JPanel(); // painel
         panel2.setLayout(new BorderLayout()); // layout
 
-        Icon vagao = new ImageIcon(getClass().getResource("../resources/images/vagao.png"));
         addTab(tab, panel2, "Vagões             ", vagao); // Adicionando no panel de abas
 
         // titulo
@@ -290,12 +301,11 @@ public class Menu extends Window {
         panel2 = new JPanel(); // painel
         panel2.setLayout(new BorderLayout()); // layout
 
-    }// Fim da Aba 02 - Vagoes
+    } // Fim da Aba 02 - Vagões
 
     private void aba03() throws SQLException {
         panel3 = new JPanel();
         panel3.setLayout(new BorderLayout());
-        Icon locomotiva = new ImageIcon(getClass().getResource("../resources/images/locomotiva.png"));
         tab.addTab("Locomotivas    ", locomotiva, panel3); // adicionando no panel de abas
 
         // titulo
@@ -360,14 +370,12 @@ public class Menu extends Window {
 
         panel3.add(BorderLayout.SOUTH, pBotoesL); // panel final
         // Fim da Aba 03 - Locomotivas
-    }
+    } // Fim da Aba 03 - Locomotivas
 
     private void aba04() throws SQLException {
         
         panel4 = new JPanel();
         panel4.setLayout(new BorderLayout());
-
-        Icon composicao = new ImageIcon(getClass().getResource("../resources/images/composicao.png"));
         
         addTab(tab, panel4, "Composições   ", composicao);
 
@@ -402,13 +410,12 @@ public class Menu extends Window {
 
         panel4.add(BorderLayout.SOUTH, pBotoesC);
 
-    } // Fim da Aba 04 - Composicoes
+    } // Fim da Aba 04 - Composições
 
     private void aba05() {
         panel5 = new JPanel();
         panel5.setLayout(new BorderLayout());
 
-        Icon rel = new ImageIcon(getClass().getResource("../resources/images/form.png")); // icone da aba
         addTab(tab, panel5, "Relatórios       ", rel);// adicionando no panel de abas
 
         JLabel titRel = new JLabel("Relatórios"); // titulo
@@ -455,13 +462,12 @@ public class Menu extends Window {
 
         panel5.add(BorderLayout.NORTH, titRel); // adicionando titulo
         panel5.add(BorderLayout.CENTER, relatorio);
-    } // fim da aba 05
+    } // Fim da Aba 05 - Relatórios
 
     private void aba06() {
         panel6 = new JPanel();
         panel6.setLayout(new BorderLayout()); // layout do panel
 
-        Icon informacoes = new ImageIcon(getClass().getResource("../resources/images/informações.png")); // icone da aba
         addTab(tab, panel6, "Informações    ", informacoes); // fim da aba 06
 
         JLabel titInfo = new JLabel("Informações sobre vagões");
@@ -479,16 +485,15 @@ public class Menu extends Window {
         panel6.add(BorderLayout.NORTH, titInfo);
         panel6.add(BorderLayout.CENTER, tnc);// fim da aba 06 - informacoes
 
-    }
+    } // Fim da Aba 06 - Informações
 
     private void aba07() {
         panel7 = new JPanel();
-        Icon pesquisar = new ImageIcon(getClass().getResource("../resources/images/pesquisar.png"));
         addTab(tab, panel7, "Pesquisa          ", pesquisar);
         panel7.setLayout(new BorderLayout()); // setando o layout do panel7
 
-//		JTable listaComposicoesPesquisa = new JTable(composicoes, composicoes_colunas);
-//		JScrollPane scrollPaneComposicoesPesquisa = new JScrollPane(listaComposicoes);
+        //		JTable listaComposicoesPesquisa = new JTable(composicoes, composicoes_colunas);
+        //		JScrollPane scrollPaneComposicoesPesquisa = new JScrollPane(listaComposicoes);
         JPanel pesquisa = new JPanel();
 
         // conteudo.setBorder(BorderFactory.createTitledBorder("Resultado da
@@ -502,7 +507,7 @@ public class Menu extends Window {
         pesquisa.add(bPesquisar = new JButton("Pesquisar"), cc.xy(3, 1));
 
         panel7.add(BorderLayout.NORTH, pesquisa);
-//		panel7.add(BorderLayout.CENTER, scrollPaneComposicoesPesquisa);// adicionando o panel conteudo no panel7;;
+        //		panel7.add(BorderLayout.CENTER, scrollPaneComposicoesPesquisa);// adicionando o panel conteudo no panel7;;
 
         bPesquisar.addActionListener(e -> { // actionListener do botÃ£o de Remover
             SwingUtilities.invokeLater(() -> {
@@ -573,14 +578,12 @@ public class Menu extends Window {
                 panel7.repaint();
             });
         });
-        // fim da aba 07
-    }
+    } // Fim da Aba 07 - Pesquisar
 
     private void aba08() {
         panel8 = new JPanel();
         panel8.setLayout(new BorderLayout());
 
-        Icon config = new ImageIcon(getClass().getResource("../resources/images/configurações.png")); // icone da aba
         addTab(tab, panel8, "Configurações ", config);
 
         JLabel configuracoes = new JLabel("Configuraçoes"); // titulo
@@ -628,9 +631,12 @@ public class Menu extends Window {
 
         panel8.add(BorderLayout.NORTH, configuracoes);
         panel8.add(BorderLayout.CENTER, tudo); // fim da aba 08
-    }
+    } // Fim da Aba 08 - Configurações
 
-    // eventos dos botões da aba vagão
+    /*
+    * Eventos
+    */
+
     private void eventoVagoes() {
         bCadastroVagao.addActionListener((e) -> { // actionListener do botï¿½o de cadastrar
             SwingUtilities.invokeLater(() -> {
@@ -659,7 +665,6 @@ public class Menu extends Window {
         });
     }
 
-    // eventos dos botï¿½es da aba locomotiva
     private void eventoLocomotiva() {
         bCadastroLocomotiva.addActionListener((e) -> { // actionListener do botï¿½o de Cadastrar
             SwingUtilities.invokeLater(() -> {
@@ -686,7 +691,6 @@ public class Menu extends Window {
         });
     }
 
-    // eventos dos botões da aba locomotiva
     private void eventoComposicao() {
         bCadastroComp.addActionListener((e) -> { // actionListener do botÃ£o de Cadastrar
             SwingUtilities.invokeLater(() -> {
@@ -728,6 +732,10 @@ public class Menu extends Window {
             // coloca o codigo aqui viado
         });
     }
+
+    /*
+    * Métodos auxiliares
+    */
 
     private void addTab(JTabbedPane tabbedPane, Component tab, String title, Icon icon) {
         tabbedPane.add(tab);
