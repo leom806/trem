@@ -38,40 +38,68 @@ import database.DB;
 @SuppressWarnings({ "serial", "unused" })
 public class Menu extends Window {
 
-	private ResultSet set = null;
-	private Statement statement = null;
-	private Connection conn = DB.getInstance().getConnection();
 	private int total = 0;
 	private int count = 0;
+	private ResultSet set = null;
+	private Statement statement = null;
+	private static Connection conn = DB.getInstance().getConnection();
 
 	private JTabbedPane tab; // abas da janela de menu
 
-	private Font fAbas = new Font("Calibri", Font.BOLD, 22), fBotoes = new Font("Calibri", Font.BOLD, 20),
-			fTitulo = new Font("Arial", Font.BOLD, 24); // fontes
+	private Font fAbas = new Font("Calibri", Font.BOLD, 22),
+                     fBotoes = new Font("Calibri", Font.BOLD, 20),
+                     fTitulo = new Font("Arial", Font.BOLD, 24); // fontes
 
-	private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9; // paineis das abas
+	private JPanel panel1,
+                       panel2, 
+                       panel3, 
+                       panel4, 
+                       panel5, 
+                       panel6, 
+                       panel7, 
+                       panel8, 
+                       panel9; // paineis das abas
 
-	private JButton bCadastroVagao, bRemoverVagao, bAlterarVagao, bExportarV; // aba 02 - vagões
+	private JButton bCadastroVagao, 
+			bRemoverVagao, 
+			bAlterarVagao, 
+			bExportarV; // aba 02 - vagões
 
-	private JButton bCadastroLocomotiva, bRemoverLocomotiva, bAlterarLocomotiva, bExportarL; // aba 03 - locomotivas
+	private JButton bCadastroLocomotiva, 
+			bRemoverLocomotiva, 
+			bAlterarLocomotiva, 
+			bExportarL; // aba 03 - locomotivas
 
-	private JButton bCadastroComp, bRemoverComp, bAlterarComp, bExportarC; // aba 03 - locomotivas
+	private JButton bCadastroComp, 
+			bRemoverComp, 
+			bAlterarComp, 
+			bExportarC; // aba 03 - locomotivas
 
-	private JButton bRelVagao, bRelLocomotiva, bRelComp, bRelUsuario; // aba 05 - relatórios
+	private JButton bRelVagao, 
+                        bRelLocomotiva, 
+                        bRelComp, 
+                        bRelUsuario; // aba 05 - relatórios
+        
 	private JTextArea tRelatorios; // aba 05 - relatórios
 
 	private JButton bPesquisar; // aba 07 - pesquisa
 	private JTextField tPesquisar; // aba 07 - pesquisa
 
-	private JRadioButton rbAluminium, rbFast, rbLuna, rbTexture, rbTamanho1, rbTamanho2;// aba 08 - Configurações
+	private JRadioButton rbAluminium, 
+                             rbFast, 
+                             rbLuna, 
+                             rbTexture, 
+                             rbTamanho1, 
+                             rbTamanho2;// aba 08 - Configurações
 
-	private JPanel pBotoesV, pBotoesL, pBotoesC; // paineis de botoes
+	private JPanel pBotoesV, 
+                       pBotoesL, 
+                       pBotoesC; // paineis de botoes
 
 	public static CellConstraints cc = new CellConstraints(); // pode deixar aqui ? momente
 
 	public Menu() {
-		initComp();
-
+            initComp();
 	}
 
 	public void initComp() {
@@ -83,9 +111,9 @@ public class Menu extends Window {
                 
                 // As abas a seguir interagem com o banco de dados e precisam estar dentro de um bloco try catch.
                 try {
-                    aba02();// Aba 02 - Vagï¿½es
+                    aba02();// Aba 02 - Vagões
                     aba03();// Aba 03 - Locomotivas
-                    aba04();// Aba 04 - ComposiÃ§Ãµes
+                    aba04();// Aba 04 - Composições
                 }catch(SQLException sql){
                     JOptionPane.showMessageDialog(null, "Ocorreu um erro na conexão com o banco de dados. \n"
                                                         +sql.getMessage());
@@ -173,10 +201,10 @@ public class Menu extends Window {
 		panel2.setLayout(new BorderLayout()); // layout
 
 		Icon vagao = new ImageIcon(getClass().getResource("../resources/images/vagao.png"));
-		addTab(tab, panel2, "VagÃµes             ", vagao); // Adicionando no panel de abas
+		addTab(tab, panel2, "Vagões             ", vagao); // Adicionando no panel de abas
 
 		// titulo
-		JLabel titV = new JLabel("VagÃµes");
+		JLabel titV = new JLabel("Vagões");
 		titV.setFont(fTitulo);
 		titV.setHorizontalAlignment(SwingConstants.CENTER);
 		panel2.add(BorderLayout.NORTH, titV);
@@ -240,140 +268,6 @@ public class Menu extends Window {
 		panel2 = new JPanel(); // painel
 		panel2.setLayout(new BorderLayout()); // layout
 
-		vagao = new ImageIcon(getClass().getResource("../resources/images/vagao.png"));
-		addTab(tab, panel2, "VagÃµes             ", vagao); // Adicionando no panel de abas
-
-		// titulo
-		titV = new JLabel("VagÃµes");
-		titV.setFont(fTitulo);
-		titV.setHorizontalAlignment(SwingConstants.CENTER);
-		panel2.add(BorderLayout.NORTH, titV);
-
-		// lista de vagÃµes
-		statement = conn.createStatement();
-
-		set = statement.executeQuery("SELECT COUNT(*) FROM vagoes");
-
-		while (set.next()) {
-			total = set.getInt(1);
-		}
-
-		statement.close();
-
-		vagoes = new Object[total][6];
-
-//		vagoes_colunas = {{ "ID", "Tipo", "Comprimento", "Peso", "Bitola", "ProprietÃ¡rio" }};;
-
-		count = 0;
-
-		statement = conn.createStatement();
-
-		set = statement.executeQuery("SELECT * FROM vagoes");
-
-		while (set.next()) {
-			vagoes[count][0] = set.getInt("id");
-			vagoes[count][1] = set.getString("tipo");
-			vagoes[count][2] = set.getString("comprimento");
-			vagoes[count][3] = set.getInt("peso");
-			vagoes[count][4] = set.getInt("bitola");
-			vagoes[count][5] = set.getString("proprietario");
-
-			count++;
-		}
-
-		statement.close();
-
-		listaVagoes = new JTable(vagoes, vagoes_colunas);
-		scrollPaneVagoes = new JScrollPane(listaVagoes);
-
-		panel2.add(BorderLayout.CENTER, scrollPaneVagoes);
-
-		// adicionando botoes ao JPanel
-		pBotoesV = new JPanel();
-		pBotoesV.add(bCadastroVagao = new JButton("Cadastrar"));
-		pBotoesV.add(bRemoverVagao = new JButton("Remover"));
-		pBotoesV.add(bAlterarVagao = new JButton("Alterar"));
-		pBotoesV.add(bExportarV = new JButton("Exportar dados"));
-
-		// seta a fonte dos botï¿½es da aba vagï¿½o
-		bCadastroVagao.setFont(fBotoes);
-		bRemoverVagao.setFont(fBotoes);
-		bAlterarVagao.setFont(fBotoes);
-		bExportarV.setFont(fBotoes);
-
-		// evento dos botï¿½es
-		eventoVagoes();
-
-		panel2.add(BorderLayout.SOUTH, pBotoesV); // panel final
-		panel2 = new JPanel(); // painel
-		panel2.setLayout(new BorderLayout()); // layout
-
-		vagao = new ImageIcon(getClass().getResource("../resources/images/vagao.png"));
-		addTab(tab, panel2, "VagÃµes             ", vagao); // Adicionando no panel de abas
-
-		// titulo
-		titV = new JLabel("VagÃµes");
-		titV.setFont(fTitulo);
-		titV.setHorizontalAlignment(SwingConstants.CENTER);
-		panel2.add(BorderLayout.NORTH, titV);
-
-		// lista de vagÃµes
-		statement = conn.createStatement();
-
-		set = statement.executeQuery("SELECT COUNT(*) FROM vagoes");
-
-		while (set.next()) {
-			total = set.getInt(1);
-		}
-
-		statement.close();
-
-		vagoes = new Object[total][6];
-
-//		vagoes_colunas = { "ID", "Tipo", "Comprimento", "Peso", "Bitola", "ProprietÃ¡rio" };
-
-		count = 0;
-
-		statement = conn.createStatement();
-
-		set = statement.executeQuery("SELECT * FROM vagoes");
-
-		while (set.next()) {
-			vagoes[count][0] = set.getInt("id");
-			vagoes[count][1] = set.getString("tipo");
-			vagoes[count][2] = set.getString("comprimento");
-			vagoes[count][3] = set.getInt("peso");
-			vagoes[count][4] = set.getInt("bitola");
-			vagoes[count][5] = set.getString("proprietario");
-
-			count++;
-		}
-
-		statement.close();
-
-		listaVagoes = new JTable(vagoes, vagoes_colunas);
-		scrollPaneVagoes = new JScrollPane(listaVagoes);
-
-		panel2.add(BorderLayout.CENTER, scrollPaneVagoes);
-
-		// adicionando botoes ao JPanel
-		pBotoesV = new JPanel();
-		pBotoesV.add(bCadastroVagao = new JButton("Cadastrar"));
-		pBotoesV.add(bRemoverVagao = new JButton("Remover"));
-		pBotoesV.add(bAlterarVagao = new JButton("Alterar"));
-		pBotoesV.add(bExportarV = new JButton("Exportar dados"));
-
-		// seta a fonte dos botï¿½es da aba vagï¿½o
-		bCadastroVagao.setFont(fBotoes);
-		bRemoverVagao.setFont(fBotoes);
-		bAlterarVagao.setFont(fBotoes);
-		bExportarV.setFont(fBotoes);
-
-		// evento dos botï¿½es
-		eventoVagoes();
-
-		panel2.add(BorderLayout.SOUTH, pBotoesV); // panel final
-
 	}// Fim da Aba 02 - Vagoes
 
 	public void aba03() throws SQLException {
@@ -401,7 +295,7 @@ public class Menu extends Window {
 
 		Object[][] locomotivas = new Object[total][5];
 
-		Object[] locomotivas_colunas = { "Classe", "DescriÃ§Ã£o", "PMR", "Comprimento", "Bitola" };
+		Object[] locomotivas_colunas = { "Classe", "Descrição", "PMR", "Comprimento", "Bitola" };
 
 		count = 0;
 
@@ -451,9 +345,9 @@ public class Menu extends Window {
 		panel4.setLayout(new BorderLayout());
 
 		Icon composicao = new ImageIcon(getClass().getResource("../resources/images/composicao.png"));
-		addTab(tab, panel4, "ComposiÃ§Ãµes   ", composicao);
+		addTab(tab, panel4, "Composições   ", composicao);
 
-		JLabel titC = new JLabel("ComposiÃ§Ãµes");// titulo
+		JLabel titC = new JLabel("Composições");// titulo
 		titC.setFont(fTitulo);
 		titC.setHorizontalAlignment(SwingConstants.CENTER);
 		panel4.add(BorderLayout.NORTH, titC);
@@ -470,7 +364,7 @@ public class Menu extends Window {
 
 		Object[][] composicoes = new Object[total][6];
 
-		Object[] composicoes_colunas = { "ID", "Nome", "Peso Total", "Peso RebocÃ¡vel", "Comprimento" };
+		Object[] composicoes_colunas = { "ID", "Nome", "Peso Total", "Peso Rebocável", "Comprimento" };
 
 		count = 0;
 
