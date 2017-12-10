@@ -28,6 +28,7 @@ public class Login extends Window {
     private JPasswordField pSenha;
     private Font fBotoes = new Font("Calibri", Font.BOLD, 16);
     private DB database = DB.getInstance();
+    private static Menu menu;
 
     public Login() {
         super("VLC - Login");
@@ -123,7 +124,7 @@ public class Login extends Window {
 
     private void eventoLogin() {
         bLogin.addActionListener((e) -> {
-            Menu menu = Menu.getInstance(); // Cria o menu
+            menu = Menu.getInstance(); // Cria o menu
             menu.setVisible(true);
             dispose();
         });
@@ -135,4 +136,11 @@ public class Login extends Window {
         });
     }
 
+    public static void reload(){
+        Menu.deleteInstance();
+        menu.dispose();
+        menu = Menu.getInstance();
+        menu.setVisible(true);
+    }
+    
 }

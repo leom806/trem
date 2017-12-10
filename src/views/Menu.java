@@ -113,6 +113,10 @@ public class Menu extends Window {
         return (instance==null) ? new Menu() : instance;
     }
     
+    public static void deleteInstance(){
+        instance = null;
+    }
+    
     private void initComp() {
         setTitle("VLC - Menu");
 
@@ -373,7 +377,7 @@ public class Menu extends Window {
         mcomps.setColumnIdentifiers(composicoes_colunas);
         
         // Refresh
-        atualizarComposicoes();                                 
+        carregarComposicoes();                                 
 
         // adicionando botoes ao JPanel
         pBotoesC = new JPanel();
@@ -731,7 +735,11 @@ public class Menu extends Window {
     
     // Leo
     public void atualizarComposicoes() {
-        
+        carregarComposicoes();
+        Login.reload();
+    } 
+    
+    private void carregarComposicoes(){
         try{                        
             statement = conn.createStatement();
             set = statement.executeQuery("SELECT COUNT(*) FROM composicoes");
@@ -769,12 +777,13 @@ public class Menu extends Window {
             
             listaComposicoes.invalidate();
             scrollPaneComposicoes.repaint();
+                        
+            // POR QUE DIABOS QUE O JTABLE NÃO ATUALIZA?????   
             
-            // POR QUE DIABOS QUE O JTABLE NÃO ATUALIZA?????
                         
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, "Erro ao atualizar composições.");
         }
-    } 
+    }
 
 }
