@@ -769,6 +769,8 @@ public class Menu extends Window {
             
             listaComposicoes.invalidate();
             scrollPaneComposicoes.repaint();
+            
+            // POR QUE DIABOS QUE O JTABLE NÃO ATUALIZA?????
                         
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, "Erro ao atualizar composições.");
