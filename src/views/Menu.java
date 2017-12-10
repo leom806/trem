@@ -34,6 +34,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import database.DB;
+import helpers.Helper;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
@@ -158,8 +159,14 @@ public class Menu extends Window {
         panel1 = new JPanel(); // panel da aba 01
         panel1.setLayout(new BorderLayout()); // layout
 
-        Icon home = new ImageIcon(getClass().getResource("../resources/images/home.png")); // icone da aba
-        addTab(tab, panel1, "Home               ", home);// Fim da Aba 01 - Homes
+        Icon home = null;
+        try{
+            home = new ImageIcon(getClass().getResource("../resources/images/home.png")); // icone da aba                    
+            addTab(tab, panel1, "Home               ", home);// Fim da Aba 01 - Homes
+        }catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Não foi possível carregar as imagens.");
+            Helper.getInstance().onExit();
+        }        
 
         // titulo da página incial
         JLabel titPagInicial = new JLabel("Página Inicial");
@@ -361,6 +368,7 @@ public class Menu extends Window {
         panel4.setLayout(new BorderLayout());
 
         Icon composicao = new ImageIcon(getClass().getResource("../resources/images/composicao.png"));
+        
         addTab(tab, panel4, "Composições   ", composicao);
 
         JLabel titC = new JLabel("Composições");// titulo
