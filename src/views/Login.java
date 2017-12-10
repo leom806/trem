@@ -123,7 +123,7 @@ public class Login extends Window {
 
     private void eventoLogin() {
         bLogin.addActionListener((e) -> {
-            Menu menu = new Menu();
+            Menu menu = Menu.getInstance(); // Cria o menu
             menu.setVisible(true);
             dispose();
         });

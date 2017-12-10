@@ -3,6 +3,8 @@ package views;
 import database.DB;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -12,6 +14,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.TransferHandler;
 import javax.swing.TransferHandler.TransferSupport;
+import models.Composicao;
 import models.Locomotiva;
 import models.Vagao;
 
@@ -20,7 +23,7 @@ import models.Vagao;
  *
  * @author Leonardo Momente
  */
-public class CadastroComposicao extends JDialog {
+public class CadastroComposicao extends JDialog{
 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -35,16 +38,15 @@ public class CadastroComposicao extends JDialog {
     private DefaultListModel dm1, dm2, dm3;
     private DB db = DB.getInstance();
     private Connection conn = db.getConnection();
-    
+
     private ArrayList<Vagao> vagoes = Vagao.getAll();
     private ArrayList<Locomotiva> locomotivas = Locomotiva.getAll();
 
     private ArrayList<Locomotiva> locs_na_lista = new ArrayList<>();
     private ArrayList<Vagao> vags_na_lista = new ArrayList<>();
-
     
     /**
-     * Classe aninhada para controle do Drag & Drop. 
+     * Classe aninhada para controle do Drag & Drop.
      */
     class ListHandler extends TransferHandler {
 
@@ -73,16 +75,19 @@ public class CadastroComposicao extends JDialog {
             // Regras customizadas
             if (line.contains("-")) { // É um vagão?
                 Vagao v = new Vagao(
-                    line.substring(0, 3),
-                    line.substring(4, 10),
-                    Integer.parseInt(line.substring(11, 12))
+                        line.substring(0, 3),
+                        line.substring(4, 10),
+                        Integer.parseInt(line.substring(11, 12))
                 );
+                
+                // FAZER VALIDAÇÃO DOS ELEMENTOS!
+                
                 vags_na_lista.add(v);
                 vags_na_lista.sort(v);
             } else {
                 if (locs_na_lista.size() > 2) { // Se for uma locomotiva, então há mais de 2?
                     JOptionPane.showMessageDialog(null, "A composição só pode ter 3 locomotivas!");
-                    
+
                 } else { // Se for possível, adiciona locomotiva
                     locs_na_lista.add(new Locomotiva(Integer.parseInt(line)));
                 }
@@ -107,6 +112,35 @@ public class CadastroComposicao extends JDialog {
     public CadastroComposicao() {
         initComponents();
 
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        
+        /*
+            Processo para salvar antes de sair
+        */
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int i = JOptionPane.showConfirmDialog(null, "Deseja salvar a sua composição?");
+                /*
+                    0 - Sim
+                    1 - Não
+                    2 - Cancelar
+                */
+                switch(i){
+                    case 0:
+                        salvar();   
+                        dispose();
+                        break;
+                    case 1:
+                        dispose();
+                        break;
+                    case 2:
+                        
+                        break;
+                }
+            }
+        });
+        
         jList3.setTransferHandler(new ListHandler());
         jList3.setDropMode(DropMode.INSERT);
 
@@ -126,6 +160,37 @@ public class CadastroComposicao extends JDialog {
         jList1.setModel(dm1);
         jList2.setModel(dm2);
 
+    }
+    
+    // Salva a composição no BD
+    private void salvar(){
+        String nome = (String) JOptionPane.showInputDialog("Digite o nome da composição:");
+        Composicao c = new Composicao(nome);
+        
+        // Para todos os elementos do jList
+        for(int i=0; i<jList3.getModel().getSize(); i++){
+            String elemento = String.valueOf(jList3.getModel().getElementAt(i));                        
+            
+            if(elemento.contains("-")){ // É um vagão
+                vagoes.forEach((v) -> {
+                    if(v.getId().equals(elemento.substring(4, 10))){
+                        c.addVagao(v);
+                    }
+                });
+            }else{ // Então é uma locomotiva
+                locomotivas.forEach((l) -> {
+                    if(l.getClasse() == Integer.parseInt(elemento)){
+                        c.addLocomotiva(l);
+                    }
+                });
+            }
+        }
+        
+        c.save();
+        JOptionPane.showMessageDialog(null, "Composição: "+nome+" adicionada!");
+        
+        Menu.getInstance().atualizarComposicoes();
+        
     }
 
     @SuppressWarnings("unchecked")

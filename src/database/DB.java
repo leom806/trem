@@ -127,7 +127,7 @@ public final class DB{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
         sv.execute(sb.append("CREATE TABLE IF NOT EXISTS vagoes (")             
-//                .append("num INT AUTO_INCREMENT PRIMARY KEY,")
+                .append("num INT AUTO_INCREMENT PRIMARY KEY,")
                 .append("id CHAR(6) UNIQUE,")
                 .append("letras CHAR(3) NOT NULL,")
                 .append("digito INT,")
