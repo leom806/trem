@@ -18,7 +18,7 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
             Login login = new Login();
-            Helper.getInstance().switchUI(login);
+            Helper.switchUI(login, Helper.DEFAULT);
             login.setVisible(true);
         });
 

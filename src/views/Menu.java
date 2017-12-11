@@ -35,6 +35,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import database.DB;
 import helpers.Helper;
+import java.awt.IllegalComponentStateException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
@@ -79,21 +80,22 @@ public class Menu extends Window {
     private JTable listaComposicoes;
     private JScrollPane scrollPaneComposicoes;
     private JButton bCadastroComp,
-            bRemoverComp,
-            bAlterarComp,
-            bExportarC; // aba 04 - composições 
+                    bRemoverComp,
+                    bAlterarComp,
+                    bExportarC; // aba 04 - composições 
 
     private JButton bRelVagao,
-            bRelLocomotiva,
-            bRelComp,
-            bRelUsuario; // aba 05 - relatórios
+                    bRelLocomotiva,
+                    bRelComp,
+                    bRelUsuario; // aba 05 - relatórios
 
     private JTextArea tRelatorios; // aba 05 - relatórios
 
     private JButton bPesquisar; // aba 07 - pesquisa
     private JTextField tPesquisar; // aba 07 - pesquisa
 
-    private JRadioButton rbAluminium,
+    private JRadioButton rbDefault,
+                         rbAluminium,
                          rbFast,
                          rbLuna,
                          rbTexture,
@@ -169,9 +171,9 @@ public class Menu extends Window {
         cp.add(tab);
 
         tab.setFont(fAbas); // setando fonte das abas
-        tab.setFocusable(false);
+        tab.setFocusable(false); // remove o outline da aba selecionada
         setSize(800, 600); // tamanho da janela
-        setLocationRelativeTo(null); // opï¿½ï¿½o para fazer a janela abrir no centro da tela
+        setLocationRelativeTo(null); // opção para fazer a janela abrir no centro da tela
     }
 
     private void aba01() {
@@ -598,22 +600,21 @@ public class Menu extends Window {
         tema.setLayout(new GridLayout(1, 4)); // layout
 
         // opcoes de temas
+        tema.add(rbDefault = new JRadioButton("Default"));
         tema.add(rbAluminium = new JRadioButton("Aluminium"));
         tema.add(rbFast = new JRadioButton("Fast"));
         tema.add(rbLuna = new JRadioButton("Luna"));
-        tema.add(rbTexture = new JRadioButton("Texture"));
+        tema.add(rbTexture = new JRadioButton("Texture")); 
+        rbDefault.setSelected(true);
 
         // grupo de radioButtons
         ButtonGroup bg = new ButtonGroup();
+        bg.add(rbDefault);
         bg.add(rbAluminium);
         bg.add(rbFast);
         bg.add(rbLuna);
         bg.add(rbTexture);
 
-        // JButton btn = new JButton("Switch");
-        // btn.addActionListener((e) -> {
-        // Helper.switchUI(this);
-        // });
         JPanel tamanho = new JPanel();
         tamanho.setBorder(BorderFactory.createTitledBorder("Resolução"));
         tamanho.setLayout(new GridLayout(1, 2));
@@ -624,10 +625,13 @@ public class Menu extends Window {
         ButtonGroup bgTamanho = new ButtonGroup();
         bgTamanho.add(rbTamanho1);
         bgTamanho.add(rbTamanho2);
+        rbTamanho1.setSelected(true);
 
         // tema.add(btn);
         tudo.add(tema);
         tudo.add(tamanho);
+        
+        eventosConfiguracoes();
 
         panel8.add(BorderLayout.NORTH, configuracoes);
         panel8.add(BorderLayout.CENTER, tudo); // fim da aba 08
@@ -733,6 +737,60 @@ public class Menu extends Window {
         });
     }
 
+    private void eventosConfiguracoes(){
+        
+        rbDefault.addActionListener((e) -> {
+            updateUI(Helper.DEFAULT);
+        });
+                
+        rbAluminium.addActionListener((e) -> {
+            updateUI(Helper.ALUMINIUM);
+        });
+        
+        rbFast.addActionListener((e) -> {
+            updateUI(Helper.FAST);
+        });
+        
+        rbLuna.addActionListener((e) -> {
+            updateUI(Helper.LUNA);
+        });
+        
+        rbTexture.addActionListener((e) -> {
+            updateUI(Helper.TEXTURE);
+        });
+        
+  
+        rbTamanho1.addActionListener((e) -> {
+            changeSize(1); // 800x600
+        });
+        
+        rbTamanho2.addActionListener((e) -> {
+            changeSize(0); // Fullscreen
+        });
+    }
+    
+    private void updateUI(String look){
+        Helper.switchUI(this, look);
+    }
+    
+    private void changeSize(int mode){
+        try{
+            if(mode==0){
+                this.setExtendedState(MAXIMIZED_BOTH); 
+                this.setUndecorated(true);
+            }else{
+                this.setExtendedState(NORMAL); 
+                this.setUndecorated(false);
+                this.setSize(800, 600);
+            }
+        }catch(IllegalComponentStateException ex){
+            // Do nothing..
+        }
+        
+        this.revalidate();
+        this.repaint();
+    }
+    
     /*
     * Métodos auxiliares
     */

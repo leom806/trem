@@ -25,43 +25,30 @@ public class Helper {
     private static HashMap<Character, PB> pmas;
     private static Helper instance = null;
     private Character[] pmasList = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U'};
-    private static int lookAndFeel = 1; // Look and Feel inicial
+    
+    public static final String FAST = "com.jtattoo.plaf.fast.FastLookAndFeel";
+    public static final String TEXTURE = "com.jtattoo.plaf.texture.TextureLookAndFeel";
+    public static final String LUNA = "com.jtattoo.plaf.luna.LunaLookAndFeel";
+    public static final String ALUMINIUM = "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel";
+    public static final String DEFAULT = "";
+    
 
-    public static <T extends JFrame> void switchUI(T component) {
+    public static <T extends JFrame> void switchUI(T component, String look) {
         try {
             // javax.swing.plaf.metal.MetalLookAndFeel
             // com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel
             // com.sun.java.swing.plaf.motif.MotifLookAndFeel
-
-            String currLook = "";
-
-            lookAndFeel = (lookAndFeel > 3) ? 0 : lookAndFeel;
-
-            switch (lookAndFeel) {
-                case 0:
-                    currLook = "com.jtattoo.plaf.texture.TextureLookAndFeel";
-                    lookAndFeel++;
-                    break;
-                case 1:
-                    currLook = "com.jtattoo.plaf.luna.LunaLookAndFeel";
-                    lookAndFeel++;
-                    break;
-                case 2:
-                    currLook = "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel";
-                    lookAndFeel++;
-                    break;
-                case 3:
-                    currLook = "com.jtattoo.plaf.fast.FastLookAndFeel";
-                    lookAndFeel++;
-                    break;
+            
+            if(look.isEmpty()){
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }else{
+                UIManager.setLookAndFeel(look);                
             }
-
-            UIManager.setLookAndFeel(currLook);
             SwingUtilities.updateComponentTreeUI(component);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
                 | UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar o tema.");
         }
     }
 
