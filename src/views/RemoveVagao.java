@@ -22,17 +22,27 @@ import java.sql.Statement;
 
 @SuppressWarnings({"serial", "unused"}) // tirando os avisos
 
+/**
+ * Classe que estende JFrame e remove locomotivas.
+ * 
+ * @author Leonardo Momente
+ */
 public class RemoveVagao extends JFrame {
-
+    /** Fonte para o formulario. */
     private Font fFormulario = new Font("Calibri", Font.BOLD, 16);
+    /** Labels para numero serial do vagao e informacoes. */
     private JLabel lSerial, lInfo;
+    /** Botoes de remover e cancelar. */
     private JButton bRemove, bCancelar;
+    /** Area de texto para insercao da classe. */
     private JTextField tClasse;
 
+    /** Construtor da classe. */
     public RemoveVagao() {
         initComp();
     }
 
+    /** Inicializa os componentes. */
     public void initComp() {
         setTitle("Remoção de Vagão");
 
@@ -78,6 +88,7 @@ public class RemoveVagao extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /** Eventos dos botoes. */
     public void eventoRemoveVagao() {
         bRemove.addActionListener((e) -> {
             int total = 0;

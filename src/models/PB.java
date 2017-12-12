@@ -8,14 +8,10 @@ package models;
  */
 public class PB{
     
-    /**
-     * Peso do objeto dado em toneladas.
-     */
+    /** Peso do objeto dado em toneladas. */
     private final long peso;          
     
-    /**
-     * Tamanho em metros da bitola.
-     */
+    /** Tamanho em metros da bitola. */
     private final double bitola;   
     
     /**

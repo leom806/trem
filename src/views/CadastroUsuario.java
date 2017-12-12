@@ -10,20 +10,32 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 @SuppressWarnings({ "serial", "unused" }) // tirando os avisos
+
+/**
+ * Classe que estende JFrame e cadastra usuarios.
+ * 
+ * @author Antonignoni Cesar
+ */
 public class CadastroUsuario extends JDialog {
-
+        /** Define as fontes para os botoes e para o formulario. */
 	private Font fFormulario = new Font("Calibri", Font.PLAIN, 16), fBotoes = new Font("Calibri", Font.BOLD, 16);;
-
+        /** Botoes de cadastrar e cancelar. */
 	private JButton bCadastrar, bCancelar;
-	private JTextField tNome, tNumeroFuncionario, tRg, tSetor, tCargo, tData, tUsuario;
-	private JPasswordField pSenha;
-	private JLabel lNome, lNumeroFuncionario, lRg, lSetor, lCargo, lData, lUsuario, lSenha;
+	/** Campos para input de nome, numero do funcionario, RG, setor, cargo, data e usuario. */
+        private JTextField tNome, tNumeroFuncionario, tRg, tSetor, tCargo, tData, tUsuario;
+	/** Campo para input de senha. */
+        private JPasswordField pSenha;
+	/** Label para o nome, numero do funcionario, RG, setor, cargo, data, usuario e senha. */
+        private JLabel lNome, lNumeroFuncionario, lRg, lSetor, lCargo, lData, lUsuario, lSenha;
 
+        /** Construtor para cadastrar usuario. */
 	public CadastroUsuario() {
-
 		initComp();
 	}
 
+        /**
+         * Metodo que inicializa o componente.
+         */
 	public void initComp() {
 		setTitle("Cadastro de usu�rio");
 
@@ -31,8 +43,8 @@ public class CadastroUsuario extends JDialog {
 		// panel1.setBorder(BorderFactory.createTitledBorder("Cadastro de usu�rio"));
 		panel1.setLayout(new BorderLayout());
 
-		JPanel cad = new JPanel();// panel com o formul�rio de cadastro
-		cad.setBorder(BorderFactory.createTitledBorder("Cadastro de usu�rio"));// borda do panel formul�rio
+		JPanel cad = new JPanel();// panel com o formulario de cadastro
+		cad.setBorder(BorderFactory.createTitledBorder("Cadastro de usu�rio"));// borda do panel formulario
 
 		FormLayout form = new FormLayout("2dlu, 2dlu, 120dlu, 15dlu, 120dlu, 3dlu", // colunas
 				"3dlu, 3dlu, pref, 5dlu,pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 3dlu,"); // linhas
@@ -70,10 +82,10 @@ public class CadastroUsuario extends JDialog {
 		bCadastrar.setFont(fBotoes);
 		bCancelar.setFont(fBotoes);
 
-		eventoUsuario();// chama o m�todo com os eventos dos bot�es
+		eventoUsuario();// chama o metodo com os eventos dos botoes
 
-		panel1.add(BorderLayout.CENTER, cad);// adicionando o panel do formul�rio
-		panel1.add(BorderLayout.SOUTH, pBotoesU); // adicionando os bot�es
+		panel1.add(BorderLayout.CENTER, cad);// adicionando o panel do formulario
+		panel1.add(BorderLayout.SOUTH, pBotoesU); // adicionando os botoes
 
 		Container cp = getContentPane();
 		cp.add(panel1);
@@ -83,9 +95,12 @@ public class CadastroUsuario extends JDialog {
 		setLocationRelativeTo(null);
 	}
 
+        /**
+         * Metodo que inicializa os eventos dos botoes.
+         */
 	public void eventoUsuario() {
 		bCadastrar.addActionListener((e) -> {
-			// evento do bot�o
+			// evento do botao
 		});
 
 		bCancelar.addActionListener((e) -> {

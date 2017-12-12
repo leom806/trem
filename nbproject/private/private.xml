@@ -3,7 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/leomo/Desktop/comboDesktop/src/views/CadastroComposicao.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/Login.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/RemoveVagao.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/Vagao.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/Subtipo.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/Window.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/Locomotiva.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/RemoveLocomotiva.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/Tipo.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/PB.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/CadastroUsuario.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/database/DB.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/models/Composicao.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/CadastroVagao.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/CadastroLocomotiva.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/Menu.java</file>
+            <file>file:/C:/Users/Dell/Desktop/trem/src/views/CadastroComposicao.java</file>
         </group>
     </open-files>
 </project-private>

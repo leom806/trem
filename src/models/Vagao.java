@@ -16,77 +16,54 @@ import javax.swing.JOptionPane;
 
 
 /**
- * Classe de objetos do tipo Vagão.
+ * Classe de objetos do tipo Vagao.
  * 
- * @author Leonardo Momente
+ * @author Breno Velasco e Leonardo Momente
  */
-public class Vagao implements Comparator, DBObject, ElementoComposicao{
-    
-    /**
-     * 3 letras que indicam o tipo, subtipo e peso máximo admissível/bitola do
-     * vagão.
-     */
+public class Vagao implements Comparator, DBObject, ElementoComposicao{   
+    /** 3 letras que indicam o tipo, subtipo e peso máximo admissivel/bitola do
+    vagao. */
     protected String letras;  
-    
-    /**
-     * Tipo do vagão.
-     */
+    /** Tipo do vagao. */
     protected Tipo tipo;
-    
-    /**
-     * Subtipo do vagão.
-     */
+    /** Subtipo do vagao. */
     protected Subtipo subtipo;
-    
-    /**
-     * Peso máximo admissível.
-     */
+    /** Peso maximo admissível. */
     protected double peso;
-    
-    /**
-     * 6 algarismos de identificação.
-     */
+    /** 6 algarismos de identificacao. */
     protected String id;                    
-    
-    /**
-     * Dígito verificador.
-     */
+    /** Digito verificador. */
     protected int digito;                   
-    
-    /**
-     * Comprimento do vagão dado em metros.
-     */
+    /** Comprimento do vagao dado em metros. */
     protected double comprimento;           
-    
-    /**
-     * Tamanho da bitola, também em metros.
-     */
+    /** Tamanho da bitola, tambem em metros. */
     protected double bitola;                
-    
-    /**
-     * Proprietário do vagão.
-     */
+    /** Proprietario do vagao. */
     protected String proprietario;   
-    
-    /**
-     * Objeto auxiliar.
-     */
+    /** Objeto auxiliar. */
     private final Helper helper = Helper.getInstance();
     
-    
+    /** Conexao com o banco de dados, utilizando-se de metodos da classe DB, para pegar
+    a instancia e a conexao. */
     private static Connection conn = DB.getInstance().getConnection();
+    /** Statement para execucao de instrucoes SQL. */
     private Statement statement = null;
+    /** Tabela de dados que representa o resultado de uma instrucao SQL. */
     private ResultSet set = null;
+    /** Tipo StringBuilder com metodos para melhor manipulacao de Strings. */
     private StringBuilder sb = new StringBuilder();
     
     
     /**
-     * Construtor padrão que verifica as letras e instancia um objeto Vagao
-     * se não houver irregularidades.
+     * Construtor padrao que verifica as letras e instancia um objeto Vagao,
+     * não havendo irregularidades.
      * 
      * @param letras
+     *                 indica o tipo, subtipo e peso maximo do vagao
      * @param id
+     *             algarismos de identificacao
      * @param digito
+     *                 digito verificador
      * @throws RuntimeException 
      */
     public Vagao(String letras, String id, int digito) throws RuntimeException{                                
@@ -97,8 +74,13 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }else{
             throw new RuntimeException("Vagão não pôde ser instânciado");
         }                
-    } // Fim construtor
+    }
 
+    /**
+     * Metodo que sobrescreve toString(), retornando o vagao e suas caracteristicas.
+     * 
+     * @return string com os dados do vagao
+     */
     @Override
     public String toString() {
         return  "Vagao {" + 
@@ -113,6 +95,11 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
                 ",\n proprietario: " + proprietario + "\n}\n";
     }
 
+    /**
+     * Metodo que sobrescreve compare(), retornando a comparacao entre os vagoes.
+     * 
+     * @return inteiro com a comparacao
+     */
     @Override
     public int compare(Object o1, Object o2) {
         if (!(o1 instanceof Vagao && o2 instanceof Vagao)){
@@ -136,6 +123,11 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }        
     }
     
+    /**
+     * Metodo que retorna as propriedades do vagao.
+     * 
+     * @return string com as propriedades
+     */
     public String getProperties(){        
         sb.append(" ( ");
         sb.append("'").append(id).append("',"); 
@@ -152,6 +144,11 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         return sb.toString();
     }
 
+    /**
+     * Metodo que realiza um UPDATE no SQL para um determinado vagao, afim de gravar seu estado atual.
+     * 
+     * @return boolean indicando se houve ou não gravação
+     */
     @Override
     public boolean save() {
         try {
@@ -163,6 +160,9 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         return true;
     }
 
+    /**
+     * Metodo que realiza um DELETE no SQL para um determinado vagao, afim de deleta-lo.
+     */
     @Override
     public void delete() {
         try {                        
@@ -173,6 +173,11 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }
     }
 
+    /**
+     * Metodo que realiza um SELECT no SQL para um determinado vagao, afim de le-lo.
+     * 
+     * @return um vagao contendo as letras, id e digito, senao lanca uma excecao
+     */
     @Override
     public Vagao read() {
         try {                        
@@ -189,6 +194,9 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }
     }
 
+    /**
+     * Metodo que realiza um UPDATE no SQL para um determinado vagao, afim de atualiza-lo/altera-lo.
+     */  
     @Override
     public void update() {
         try {                        
@@ -209,6 +217,13 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }
     }
     
+    /**
+     * Metodo que verifica se um vagao esta ou nao instanciado.
+     * 
+     * @return a verificacao do vagao, ou retorna false caso nao foi verificado
+     * @param letras
+     *                 letras identificadoras do vagao
+     */
     private boolean verificaInstanciacao(String letras){
         if(letras == null){
             return false;
@@ -219,23 +234,30 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
                 helper.verificaPMA(chars[2]) ;
     }
     
-    /*
-    Getters & Setters
-    */
-
+    /**
+     * Getter que busca letras.
+     * 
+     * @return letras
+     */
     public String getLetras() {
         return letras;
     }
 
+    /**
+     * Setter que estabelece letras.
+     * 
+     * @param letras
+     *                 letras identificadoras do vagao
+     */
     public void setLetras(String letras) {
-        // Verifica se a String letras, passada por parâmetro, não é nula é compatível 
+        // verifica se a String letras, passada por parâmetro, não é nula é compatível 
         // o tamanho necessário.
         if (!verificaInstanciacao(letras)){
             throw new RuntimeException ("Letras incompatíveis!");
         }        
         this.letras = letras;
         
-        // Converte a String em arranjo de caracteres
+        // converte a String em arranjo de caracteres
         char[] chars = letras.toCharArray();
         Tipo t = helper.getTipo(chars[0]);
         setTipo(t);
@@ -250,18 +272,40 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         setComprimento(comprimento);
     }
 
+    /**
+     * Getter que busca tipo.
+     * 
+     * @return tipo
+     */
     public Tipo getTipo() {
         return tipo;
     }
 
+    /**
+     * Setter que estabelece tipo.
+     * 
+     * @param tipo
+     *               tipo do vagao
+     */
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
 
+    /**
+     * Getter que busca subtipo.
+     * 
+     * @return subtipo
+     */
     public Subtipo getSubtipo() {
         return subtipo;
     }
 
+    /**
+     * Setter que estabelece subtipo.
+     * 
+     * @param letras
+     *                 letras identificadoras do vagao
+     */
     public void setSubtipo(String letras) {
         if(helper.verificaTipoESubtipo(letras)){
             char c_tipo = letras.toCharArray()[0];
@@ -275,19 +319,40 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         }        
     }
 
+    /**
+     * Getter que busca peso.
+     * 
+     * @return peso
+     */
     @Override
     public double getPeso() {
         return peso;
     }
 
+    /**
+     * Setter que estabelece peso.
+     * 
+     * @param peso
+     *               peso do vagao
+     */
     public void setPeso(double peso) {
         this.peso = peso;
     }
 
+    /**
+     * Getter que busca Id.
+     * 
+     * @return Id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Setter que estabelece Id.
+     * @param id
+     *             id do vagao
+     */
     public void setId(String id) {
         if (id == null || id.length() != 6){
             throw new RuntimeException ("Algarismos de identificação incompatíveis!");
@@ -296,40 +361,89 @@ public class Vagao implements Comparator, DBObject, ElementoComposicao{
         setProprietario(id);
     }
 
+    /**
+     * Getter que busca digito.
+     * 
+     * @return digito verificador
+     */
     public int getDigito() {
         return digito;
     }
 
+    /**
+     * Setter que estabelece digito.
+     * 
+     * @param digito
+     *                 digito verificador
+     */
     public void setDigito(int digito) {
         this.digito = digito;
     }
 
+    /**
+     * Getter que busca comprimento do vagao.
+     * 
+     * @return comprimento do vagao
+     */
     @Override
     public double getComprimento() {
         return comprimento;
     }
 
+    /**
+     * Setter que estabelece comprimento do vagao.
+     * 
+     * @param comprimento
+     *                      comprimento do vagao
+     */
     public void setComprimento(double comprimento) {
         this.comprimento = comprimento;
     }
 
+    /**
+     * Getter que busca bitola do vagao.
+     * 
+     * @return bitola do vagao
+     */
     @Override
     public double getBitola() {
         return bitola;
     }
 
+    /**
+     * Setter que estabelece bitola do vagao.
+     * 
+     * @param bitola
+     *                 bitola do vagao
+     */
     public void setBitola(double bitola) {
         this.bitola = bitola;
     }
 
+    /**
+     * Getter que busca proprietario do vagao.
+     * 
+     * @return proprietario do vagao.
+     */
     public String getProprietario() {
         return proprietario;
     }
 
+    /**
+     * Setter que estabelece proprietario do vagao.
+     * 
+     * @param id_proprietario
+     *                       proprietario do vagao
+     */
     public void setProprietario(String id_proprietario) {        
         this.proprietario = helper.getProprietario(id_proprietario);
     }
     
+    /**
+     * Metodo que busca todos os vagoes.
+     * 
+     * @return todos os vagoes
+     */
     public static ArrayList<Vagao> getAll(){
         ArrayList<Vagao> response = new ArrayList<>();
         try {

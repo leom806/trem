@@ -109,6 +109,9 @@ public class CadastroComposicao extends JDialog{
         }
     }
 
+    /**
+     * Metodo para cadastro de composicao.
+     */
     public CadastroComposicao() {
         initComponents();
 
@@ -162,7 +165,9 @@ public class CadastroComposicao extends JDialog{
 
     }
     
-    // Salva a composição no BD
+    /**
+     * Metodo que salva no banco de dados.
+     */
     private void salvar(){
         String nome = (String) JOptionPane.showInputDialog("Digite o nome da composição:");
         Composicao c = new Composicao(nome);
@@ -194,6 +199,10 @@ public class CadastroComposicao extends JDialog{
     }
 
     @SuppressWarnings("unchecked")
+    
+    /**
+     * Metodo que inicializa componentes.
+     */
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -214,10 +223,20 @@ public class CadastroComposicao extends JDialog{
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
 
+            /**
+             * Metodo que busca o tamanho.
+             * @return tamanho 
+             */
+            @Override
             public int getSize() {
                 return strings.length;
             }
 
+            /**
+             * Metodo que busca um elemento especifico.
+             * @return elemento
+             */
+            @Override
             public String getElementAt(int i) {
                 return strings[i];
             }

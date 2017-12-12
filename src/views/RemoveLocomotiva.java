@@ -22,17 +22,27 @@ import javax.swing.JOptionPane;
 
 @SuppressWarnings({ "serial", "unused" }) // tirando os avisos
 
+/**
+ * Classe que estende JFrame e remove locomotivas.
+ * 
+ * @author Leonardo Momente
+ */
 public class RemoveLocomotiva extends JFrame{
-
+        /** Fonte para o formulario. */
 	private Font fFormulario = new Font("Calibri", Font.BOLD, 16);
+        /** Labels para classe e informacoes. */
 	private JLabel lClasse, lInfo;
+        /** Botoes de remover e cancelar. */
 	private JButton bRemove, bCancelar;
+        /** Area de texto para a classe do vagao. */
 	private JTextField tClasse;
 
+        /** Construtor da classe. */
 	public RemoveLocomotiva() {
 		initComp();
 	}
 
+        /** Metodo que inicializa o componente. */
 	public void initComp() {
 		setTitle("Remoção de Vagão");
 
@@ -78,6 +88,7 @@ public class RemoveLocomotiva extends JFrame{
 		setLocationRelativeTo(null);
 	}
 
+        /** Acoes dos botoes. */
 	public void eventoRemoveLocomotiva() {
 		bRemove.addActionListener((e) -> {
                     int total = 0;

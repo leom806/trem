@@ -21,15 +21,27 @@ import database.DB;
 import java.sql.SQLException;
 
 @SuppressWarnings({"serial", "unused"})
-public class Login extends Window {
 
+/**
+ * Classe que estende Janela e constroi uma tela de Login.
+ * 
+ * @author Antonignoni Cesar
+ */
+public class Login extends Window {
+    /** Botoes de login e cadastro. */
     private JButton bLogin, bCadastro;
+    /** Campos de input para usuario. */
     private JTextField tUsuario;
+    /** Campo para senha. */    
     private JPasswordField pSenha;
+    /** Define a fonte para os botoes. */
     private Font fBotoes = new Font("Calibri", Font.BOLD, 16);
+    /** Variavel de tipo BD que recupera a instancia do banco de dados. */
     private DB database = DB.getInstance();
+    /** Variavel de tipo menu. */
     private static Menu menu;
 
+    /** Construtor para login. */
     public Login() {
         super("VLC - Login");
 
@@ -48,6 +60,10 @@ public class Login extends Window {
         menu();
     }
 
+    /** 
+     * Metodo para verificar se o programa ja foi aberto.
+     * @return boolean true ou false 
+     */
     private boolean podeRodar() {
         File f = new File(".lock");
         if (f.exists()) {
@@ -61,11 +77,17 @@ public class Login extends Window {
         return true;
     }
 
+    /**
+     * Metodo que inicializa o banco de dados.
+     */
     private void inicializarBD() throws SQLException {        
         database.getConnection();
         database.createTables();
     }
 
+    /**
+     * Metodo que inicializa o menu.
+     */    
     private void menu() {
 
         Font f = new Font("Arial", Font.BOLD, 18);
@@ -122,6 +144,7 @@ public class Login extends Window {
         setLocationRelativeTo(null);
     }
 
+    /** Acoes relacionadas aos botoes de login e cadastro. */
     private void eventoLogin() {
         bLogin.addActionListener((e) -> {
             menu = Menu.getInstance(); // Cria o menu
@@ -136,6 +159,7 @@ public class Login extends Window {
         });
     }
 
+    /** Metodo principal para inicializacao do login e helper. */
     public static void reload(){
         Menu.deleteInstance();
         menu.dispose();

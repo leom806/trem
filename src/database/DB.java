@@ -13,19 +13,41 @@ import org.h2.tools.Server;
  */
 
 public final class DB{
+    /** Loader do driver SQL. */
     private static final String DB_DRIVER = "org.h2.Driver";
+    /** Conexao com o banco de dados. */
     private static final String DB_CONNECTION = "jdbc:h2:file:~/test\\\\cdb;AUTO_SERVER=true";
+    /** String que recebe nome do usuario para o BD. */
     private static final String DB_USER = "sa";
+    /** String que recebe nome da senha para o BD. */
     private static final String DB_PASSWORD = "";
+    /** Conexao do BD que recebe null. */
     private static Connection conn = null;
+    /** Instancia da classe que recebe null. */
     private static DB instance = null;
     
+     /**
+     * Construtor default.
+     */    
     private DB(){}
     
+    /**
+     * Metodo estatico que retorna uma instancia de uma classe DB.
+     * Nao havendo uma instancia existente, uma eh criada.
+     * 
+     * @return instancia de BD
+     */
     public static DB getInstance(){
         return (instance==null) ? instance = new DB() : instance;
     }
     
+    /**
+     * Metodo publico que busca uma conexao SQL.
+     * Nao havendo uma conexao existente, uma eh criada usando a importacao DriverManager.
+     * Caso haja erro na comunicacao com o banco de dados, uma excecao eh lancada.
+     * 
+     * @return conexao
+     */
     public Connection getConnection(){           
         if (conn != null)
             return conn;
@@ -42,6 +64,14 @@ public final class DB{
         return conn;
     }
     
+     /**
+     * Metodo publico que cria tabelas.
+     * Nao havendo uma conexao existente com o banco de dados, uma excecao eh lancada.
+     * Para a criacao de vagoes, locomotivas, composicoes, e seus respectivos relacionamentos,
+     * sao lancadas excecoes no caso de falhas com o SQL.
+     * Uso de threads para aproveitamento de recursos.
+     * Eh lancada uma excecao caso nao seja possivel encerrar a conexao com o SQL.
+     */
     public void createTables(){
         
         if (conn==null){
@@ -54,7 +84,7 @@ public final class DB{
             Thread t1, t2, t3, t4;
 
             /*
-            Chamada assíncrona ao banco de dados para criar as tabelas principais.
+            Chamada assincrona ao banco de dados para criar as tabelas principais.
             */
             t1 = new Thread(() -> {
                 try {
@@ -108,6 +138,10 @@ public final class DB{
                 
     }
     
+    /**
+     * Metodo publico que deleta todas as tabelas.
+     * Havendo erros com o SQL, uma excecao eh lancada.
+     */
     public void dropTables() {
         Statement s;
         try {
@@ -123,6 +157,10 @@ public final class DB{
         
     }
     
+    /**
+     * Metodo privado que cria uma tabela do tipo vagao.
+     * @throws java.sql.SQLException
+     */
     private void createVagoes() throws SQLException{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
@@ -142,6 +180,10 @@ public final class DB{
         );
     }        
     
+    /**
+     * Metodo privado que cria uma tabela do tipo locomotiva.
+     * @throws java.sql.SQLException
+     */
     private void createLocomotivas() throws SQLException{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
@@ -156,6 +198,10 @@ public final class DB{
         );
     }
     
+    /**
+     * Metodo privado que cria uma tabela que relaciona vagao com composicao.
+     * @throws java.sql.SQLException
+     */
     private void createVagoesComposicao() throws SQLException{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
@@ -169,6 +215,10 @@ public final class DB{
             );
     }
     
+    /**
+     * Metodo privado que cria uma tabela que relaciona locomotiva com composicao.
+     * @throws java.sql.SQLException
+     */
     private void createLocomotivaComposicao() throws SQLException{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
@@ -182,6 +232,10 @@ public final class DB{
             );
     }   
     
+    /**
+     * Metodo privado que cria uma tabela do tipo composicao.
+     * @throws java.sql.SQLException
+     */
     private void createComposicoes() throws SQLException{
         Statement sv = conn.createStatement();
         StringBuilder sb = new StringBuilder();
@@ -196,7 +250,10 @@ public final class DB{
         );        
     }
     
-    
+    /**
+     * Metodo publico que encerra a conexao com o SQL.
+     * Caso nao seja possivel encerrar a conexao, uma excecao eh lancada.
+     */    
     public static void close(){
         try {
             conn.close();

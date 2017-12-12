@@ -9,24 +9,54 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Classe de objetos do tipo Composicao.
+ * 
+ * @author Leonardo Momente
+ */
 public class Composicao implements DBObject{
+    /** Lista com os vagoes. */
     protected ArrayList<Vagao> vagoes = new ArrayList<>();
+    /** Lista com as locomotivas. */
     protected ArrayList<Locomotiva> locomotivas = new ArrayList<>();
+    /** Nome da composicao. */
     private String nome;
+    /** Inteiro com a quantidade de locomotivas. */
     private int qntdLocomotivas = 0;
+    /** Peso total da composicao. */
     private double pesoTotal = 0.0;
+    /** Peso rebocavel da composicao. */
     private double pesoRebocavel = 0.0;
+    /** Comprimento do vagao. */
     private double comprimento = 0.0;
-    private static final double COMPRIMENTO_MAX = 2000.0; // dado em metros 
+    /** Variavel da classe e imutavel, que determina o comprimento maximo de uma composicao. */
+    private static final double COMPRIMENTO_MAX = 2000.0; // dado em metros
+    /** Conexao com o banco de dados, utilizando-se de metodos da classe DB, para pegar
+    a instancia e a conexao. */
     private static Connection conn = DB.getInstance().getConnection();
+    /** Identificador da locomotiva. */
     private int id;
     
-    
+    /**
+     * Construtor padrao que recebe a classe de uma composicao.
+     * 
+     * @param nome
+     *                 nome da composicao
+     */
     public Composicao(String nome){
         this.nome = nome;
     }
     
+    /**
+     * Construtor que recebe um nome, locomotiva e uma lista de vagoes.
+     * 
+     * @param nome
+     *                 nome da composicao
+     * @param locomotiva
+     *                     locomotiva a ser adicionada
+     * @param vagoes
+     *                 vagoes a serem adicionados
+     */
     public Composicao(String nome, Locomotiva locomotiva, List<Vagao> vagoes){
         this.locomotivas.add(locomotiva);
         vagoes.forEach((v)->{
@@ -35,6 +65,16 @@ public class Composicao implements DBObject{
         this.nome = nome;
     }
     
+    /**
+     * Construtor que recebe um nome, uma lista de locomotivas e uma lista de vagoes.
+     * 
+     * @param nome
+     *                 nome da composicao
+     * @param locomotivas
+     *                     locomotivas a serem adicionadas
+     * @param vagoes
+     *                 vagoes a serem adicionados
+     */
     public Composicao(String nome, List<Locomotiva> locomotivas, List<Vagao> vagoes){
         
         locomotivas.forEach((l)->{
@@ -51,10 +91,24 @@ public class Composicao implements DBObject{
         this.nome = nome;
     }
     
+    /**
+     * Metodo que adiciona um vagao a composicao.
+     * 
+     * @param v
+     *            vagao a ser adicionado
+     */
     public void addVagao(Vagao v){
         addVagao(v, true);
     }
     
+    /**
+     * Metodo que adiciona um vagao a composicao e ordena os vagoes.
+     * 
+     * @param v
+     *            vagao a ser adicionado
+     * @param sort
+     *               boolean que diz se os vagoes devem ou nao ser ordenados
+     */
     public void addVagao(Vagao v, boolean sort){
         
         verificarComposicao(v);
@@ -68,6 +122,12 @@ public class Composicao implements DBObject{
         }
     }       
     
+    /**
+     * Metodo que adiciona uma lista de vagoes a composicao.
+     * 
+     * @param vagoes
+     *            vagoes a serem adicionados
+     */
     public void addVagoes(List<Vagao> vagoes){
         vagoes.forEach((v)->{
             addVagao(v, false);
@@ -75,6 +135,12 @@ public class Composicao implements DBObject{
         this.vagoes.sort(vagoes.get(0));
     }
     
+    /**
+     * Metodo que adiciona uma locomotiva a composicao.
+     * 
+     * @param l
+     *            locomotiva a ser adicionada
+     */
     public void addLocomotiva(Locomotiva l){
         
         verificarComposicao(l);
@@ -84,12 +150,23 @@ public class Composicao implements DBObject{
         pesoRebocavel += l.getPeso();
     }          
 
-    
+    /**
+     * Metodo que remove um vagao da composicao.
+     * 
+     * @param v
+     *            vagao a ser removido
+     */
     public void removerVagao(Vagao v){
         this.vagoes.remove(v);
         this.vagoes.sort(v);
     }
     
+    /**
+     * Metodo que remove um vagao da composicao.
+     * 
+     * @param id
+     *            remove o vagao a partir do id
+     */
     public void removerVagao(String id){
         for(Vagao v : vagoes) {
             if(v.getId().equals(id)){
@@ -100,6 +177,12 @@ public class Composicao implements DBObject{
         }   
     }
     
+    /**
+     * Metodo que remove uma locomotiva da composicao.
+     * 
+     * @param l
+     *            locomotiva a ser removida
+     */
     public void removerLocomotiva(Locomotiva l){
         if(qntdLocomotivas==1){
             throw new RuntimeException("A composição deve ter ao menos uma locomotiva!");
@@ -109,6 +192,12 @@ public class Composicao implements DBObject{
         pesoRebocavel -= l.getPeso();
     }
     
+    /**
+     * Metodo que remove uma locomotiva da composicao.
+     * 
+     * @param classe
+     *            classe, ou identificador, da locomotiva a ser removida
+     */
     public void removerLocomotiva(int classe){
         for(Locomotiva l : locomotivas) {
             if(l.getClasse()== classe){
@@ -118,6 +207,14 @@ public class Composicao implements DBObject{
         }   
     }
     
+    /**
+     * Metodo que verifica se a composicao esta dentro dos conformes estabelecidos.
+     * 
+     * @param <T>
+     *              elemento da composicao
+     * @param elemento
+     *                   um elemento generico
+     */
     private <T extends ElementoComposicao> void verificarComposicao(T elemento){
         
         if(qntdLocomotivas>0){
@@ -135,10 +232,11 @@ public class Composicao implements DBObject{
         }
     }
     
-    /*
-    DBObject methods
-    */
-    
+    /**
+     * Metodo que realiza um INSERT no SQL para uma determinada composicao, afim de gravar seu estado atual.
+     * 
+     * @return boolean indicando se houve ou não gravação
+     */
     @Override
     public boolean save() {
         try {
@@ -184,6 +282,9 @@ public class Composicao implements DBObject{
         return true;
     }
 
+    /**
+     * Metodo que realiza um DELETE no SQL para uma determinada composicao, afim de deleta-la.
+     */
     @Override
     public void delete() {
         try {
@@ -196,9 +297,11 @@ public class Composicao implements DBObject{
         }
     }
 
-    /*
-    DBObject methods
-    */
+    /**
+     * Metodo que realiza um SELECT no SQL para uma determinada composicao, afim de le-la.
+     * 
+     * @return uma composicao contendo o resultado da consulta
+     */
     @Override
     public Composicao read() {
         
@@ -248,7 +351,9 @@ public class Composicao implements DBObject{
         }        
     }
 
-
+    /**
+     * Metodo que realiza um UPDATE no SQL para uma determinada composicao, afim de atualiza-la/altera-la.
+     */ 
     @Override
     public void update() {
         try {
@@ -265,26 +370,49 @@ public class Composicao implements DBObject{
         }
     }
 
-    /*
-    Getters & Setters
-    */
-    
+    /**
+     * Getter que busca vagoes
+     * 
+     * @return vagoes
+     */
     public ArrayList<Vagao> getVagoes() {
         return vagoes;
     }
 
+    /**
+     * Getter que busca locomotivas
+     * 
+     * @return locomotivas
+     */
     public ArrayList<Locomotiva> getLocomotivas() {
         return locomotivas;
     }
 
+    /**
+     * Getter que busca a quantidade de locomotivas
+     * 
+     * @return quantidade de locomotivas
+     */
     public int getQntdLocomotivas() {
         return qntdLocomotivas;
     }
 
+    /**
+     * Getter que busca o nome da composicao
+     * 
+     * @return nome da composicao
+     */
     public String getNome() {
         return nome;
     }
         
+    /**
+     * Metodo que busca por um vagao a partir de uma id.
+     * 
+     * @param id
+     *             id do vagao
+     * @return vagao, caso encontrado
+     */
     public Vagao find(String id){
         if(id.length() != 6){
             throw new RuntimeException("Id inválido na pesquisa do vagão!");
@@ -297,10 +425,11 @@ public class Composicao implements DBObject{
         return null;
     }
     
-    /*
-    toString()
-    */
-
+    /**
+     * Metodo que sobrescreve toString(), retornando a composicao e suas caracteristicas.
+     * 
+     * @return string com os dados da composicao
+     */
     @Override
     public String toString() {
         return "Composicao{" + "vagoes=" + vagoes + ", locomotivas=" + locomotivas + ", nome=" + nome + ", qntdLocomotivas=" + qntdLocomotivas + ", pesoTotal=" + pesoTotal + ", pesoRebocavel=" + pesoRebocavel + ", comprimento=" + comprimento + '}';

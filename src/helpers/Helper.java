@@ -11,22 +11,37 @@ import javax.swing.UnsupportedLookAndFeelException;
 import models.*;
 
 /**
- * Classe auxiliar que disponibiliza métodos estáticos para tarefas gerais,
+ * Classe auxiliar que disponibiliza metodos estaticos para tarefas gerais,
  * utilizando o padrão de projeto Singleton.
  * 
  * @author Leonardo Momente
  */
 public class Helper {
-    
+    /** HashMap para controlar chaves e elementos dos tipos. */
     private static HashMap<Character, Tipo> tipos;
+    /** HashMap para controlar chaves e elementos dos tipos. */
     private static HashMap<String, Tipo> tiposR;
+    /** HashMap para controlar chaves e elementos dos tipos. */
     private static HashMap<String, Character> tiposLetras;
+    /** HashMap para controlar chaves e elementos dos subtipos. */
     private static HashMap<Tipo, ArrayList<Subtipo>> subtipos;
+    /** HashMap para controlar chaves e elementos dos pesos e bitolas. */
     private static HashMap<Character, PB> pmas;
+    
+    /** Instancia do objeto que recebe nulo. */
     private static Helper instance = null;
+    /** Array de caracteres contendo todos os caracteres dos tipos peso e bitola. */
     private Character[] pmasList = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'P', 'Q', 'R', 'S', 'T', 'U'};
-    private static int lookAndFeel = 1; // Look and Feel inicial
+    /** Look and Feel inicial. */
+    private static int lookAndFeel = 1;
 
+    /**
+     * Metodo publico que altera a interface grafica da janela.
+     * @param <T>
+     *             Objeto que eh filho de JFrame
+     * @param component
+     *                    componente swing
+     */    
     public static <T extends JFrame> void switchUI(T component) {
         try {
             // javax.swing.plaf.metal.MetalLookAndFeel
@@ -65,7 +80,9 @@ public class Helper {
         }
     }
 
-    // Helper das views na hora de sair
+    /**
+     * Metodo para auxiliar a saida sem ocorrencia de erros do programa.
+     */
     public static void onExit() {
         if (JOptionPane.showConfirmDialog(null,
                 "Deseja realmente sair?", "Sair",
@@ -81,6 +98,9 @@ public class Helper {
         }
     }
     
+    /**
+     * Declaracoes dos tipos que definem um vagao.
+     */    
     private Tipo gondola,
                  plataforma,
                  tanque,
@@ -90,11 +110,15 @@ public class Helper {
                  gaiola,
                  caboose;
     
+    /**
+     * Metodo privado que inicializa as variaveis da classe.
+     */
     private void init(){        
-
+        // inicializa tipos caso seja nulo
         if (tipos == null){
             tipos = new HashMap<>();
             
+            // atribui aos tipos das hash maps valores por padrao
             gondola       = new Tipo(1, "Gôndola"); 
             plataforma    = new Tipo(2, "Plataforma");
             tanque        = new Tipo(3, "Tanque");
@@ -104,6 +128,8 @@ public class Helper {
             gaiola        = new Tipo(7, "Gaiola");
             caboose       = new Tipo(8, "Caboose");
             
+            // atribui diretamente as hash maps valores por padrão, utilizando das variaveis
+            // declaradas acima
             tipos.put('G', gondola);
             tipos.put('P', plataforma);
             tipos.put('T', tanque);
@@ -117,7 +143,7 @@ public class Helper {
         if(tiposR == null){
             tiposR = new HashMap<>();
             
-            // Setando os Tipos pelo nome de forma a poder resgatar pela view
+            // setando os Tipos pelo nome, de forma a poder resgatar pela view
             tiposR.put("Gôndola", gondola);
             tiposR.put("Plataforma", plataforma);
             tiposR.put("Tanque", tanque);
@@ -128,6 +154,7 @@ public class Helper {
             tiposR.put("Caboose", caboose);
         }
         
+        // setando os Tipos pelo caracter de designacao, de forma a poder resgatar pela view
         if(tiposLetras == null){
             tiposLetras = new HashMap<>();
 
@@ -141,9 +168,11 @@ public class Helper {
             tiposLetras.put("Caboose", 'C');
         }
         
+        // inicializa subtipos caso seja nulo
         if (subtipos == null){
             subtipos = new HashMap<>();                        
             
+            // cria array lists para cada subtipo do hash map
             ArrayList<Subtipo> subtiposGondola = new ArrayList<>();
             ArrayList<Subtipo> subtiposPlataforma = new ArrayList<>();
             ArrayList<Subtipo> subtiposTanque = new ArrayList<>();
@@ -153,7 +182,7 @@ public class Helper {
             ArrayList<Subtipo> subtiposGaiola = new ArrayList<>();
             ArrayList<Subtipo> subtiposCaboose = new ArrayList<>();
             
-            
+            // atribui aos subtipos das hash maps valores por padrão
             subtiposGondola.add(new Subtipo(1, 'D', "para descarga em car-dumper"));
             subtiposGondola.add(new Subtipo(2, 'P', "bordas fixas e portas laterais"));
             subtiposGondola.add(new Subtipo(3, 'F', "bordas fixas e fundo móvel (drop-bottom)"));         
@@ -232,7 +261,8 @@ public class Helper {
             subtiposCaboose.add(new Subtipo(63, 'N', "não remunerado"));
             subtiposCaboose.add(new Subtipo(64, 'Q', "outros tipos"));
             
-            
+            // atribui diretamente as hash maps valores por padrão, utilizando das variaveis
+            // declaradas acima       
             subtipos.put(gondola, subtiposGondola);
             subtipos.put(plataforma, subtiposPlataforma);
             subtipos.put(tanque, subtiposTanque);
@@ -243,6 +273,7 @@ public class Helper {
             subtipos.put(caboose, subtiposCaboose);
         }
     
+        // se pmas for nulo, inicializa-o com uma hash map e popula com valores
         if (pmas == null){    
             pmas = new HashMap<>();
             pmas.put('A', new PB(30,  1.0));
@@ -261,53 +292,109 @@ public class Helper {
         }
     }
     
+    /**
+     * Metodo que verifica a validez de um tipo ou subtipo.
+     * 
+     * @param letras
+     *                 letra a ser verificada
+     * @return variavel booleana
+     */    
     public boolean verificaTipoESubtipo(String letras){
         char c = letras.toCharArray()[0];
         c = toUpper(c);
         Tipo t = tipos.get(c);
         if(t != null){
-            // Recebe os subtipos permitidos para o tipo dado
+            // recebe os subtipos permitidos para o tipo dado
             ArrayList<Subtipo> subtiposPermitidos =
                     getSubtipos(t);                
 
+            // caso nao haja um subtipo permitido para a letra passada como parametro,
+            // uma excecao eh lancada.            
             if(subtiposPermitidos==null){
                 throw new RuntimeException("Não há subtipos para esse Tipo de vagão!");
             }
             
-            // Agora, dentro dos subtipos permitidos, faz-se a busca pelo subtipo
+            // agora, dentro dos subtipos permitidos, faz-se a busca pelo subtipo
             return 
                 getSubtipo(subtiposPermitidos, toUpper(letras.toCharArray()[1])) != null;
         }
         return false;        
     }
-    
+   
+    /**
+     * Metodo que verifica um PMA e o retorna.
+     * 
+     * @param c
+     *            caractere a ser verificado
+     * @return boolean indicando se o caractere foi obtido de pmas
+     */    
     public boolean verificaPMA(char c){
         c = toUpper(c);
         return pmas.get(c) != null;
     }
     
+    /**
+     * Metodo que busca um caractere de pmas e o retorna.
+     * 
+     * @param c
+     *            caractere a ser buscado
+     * @return caractere buscado
+     */
     public PB getPMA(char c){
         c = toUpper(c);
         return pmas.get(c);
     }
     
+    /**
+     * Metodo que busca um tipo e o retorna.
+     * 
+     * @param c
+     *            caractere a ser buscado
+     * @return tipo buscado a partir do caractere
+     */    
     public Tipo getTipo(char c){
         c = toUpper(c);
         return tipos.get(c);
     }
-    
+
+    /**
+     * Metodo que busca um tipo e o retorna.
+     * 
+     * @param c
+     *            caractere a ser buscado
+     * @return tipo buscado a partir do caractere
+     */        
     public Tipo getTipoR(String c){
         return tiposR.get(c);
     }
     
+    /**
+     * Metodo que busca um tipo pelo nome e o retorna.
+     * 
+     * @param c
+     *            caractere a ser buscado
+     * @return tipo buscado a partir do caractere
+     */        
     public Tipo getTipoByName(String c){
         return tiposR.get(c);
     }
     
+    /**
+     * Metodo que busca um tipo pela letra e o retorna.
+     * 
+     * @param c
+     *            caractere a ser buscado
+     * @return tipo buscado a partir do caractere
+     */        
     public Character getLetraPorTipo(String c){
         return tiposLetras.get(c);
     }
     
+    /**
+     * Metodo que busca por todos os tipos.
+     * 
+     * @return tipos
+     */          
     public String[] getTipos(){
         Object[] data = tiposR.values().toArray();
         String[] result = new String[data.length];
@@ -319,6 +406,11 @@ public class Helper {
         return result;
     }
     
+    /**
+     * Metodo que busca por todos os pesos e bitolas.
+     * 
+     * @return pmas
+     */          
     public String[] getPmas()
     {
         String[] result = new String[pmasList.length];
@@ -334,10 +426,26 @@ public class Helper {
         return result;
     }
     
+    /**
+     * Metodo que busca os subtipos de um tipo.
+     * 
+     * @param t
+     *            
+     * @return subtipos buscados
+     */    
     public ArrayList<Subtipo> getSubtipos(Tipo t){      
         return subtipos.get(t);
     }
     
+    /**
+     * Metodo que busca um subtipo especifico de um tipo.
+     * 
+     * @param array
+     *                array list de subtipos
+     * @param c
+     *            caractere a ser usado para busca do subtipo
+     * @return subtipo, ou nulo caso não seja encontrado
+     */    
     public Subtipo getSubtipo(ArrayList<Subtipo> array, char c){        
         c = toUpper(c);
         try{
@@ -352,6 +460,14 @@ public class Helper {
         return null;
     }
     
+    /**
+     * Metodo que busca um proprietario a partir de definicoes pre estabelecidas.
+     * 
+     * @param id
+     *             string contendo o id do proprietario
+     * @return
+     *           retorna o tipo de proprietario, ou lanca uma excecao caso este seja invalido
+     */    
     public String getProprietario(String id){
         
         int aux = Integer.parseInt(id);
@@ -371,12 +487,16 @@ public class Helper {
     
     /**
      * Constutor parametrizado para inicialização dos componentes.
-     * 
      */
     public Helper(){
         init();
     }
-    
+   
+    /**
+     * Metodo que retorna a instancia da classe.
+     * 
+     * @return instancia
+     */
     public static final Helper getInstance(){
         if(instance==null){
             instance = new Helper();
@@ -385,7 +505,7 @@ public class Helper {
     }
     
     /**
-     * Método auxiliar para tornar o caracter maiúsculo.
+     * Metodo auxiliar para tornar o caracter maiusculo.
      * 
      * @param c
      * @return 

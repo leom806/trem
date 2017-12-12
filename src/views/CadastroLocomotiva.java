@@ -17,23 +17,35 @@ import models.Locomotiva;
 
 @SuppressWarnings({ "serial", "unused" })
 
+/**
+ * Classe que estende JFrame e cadastra locomotivas.
+ * 
+ * @author Antonignoni Cesar
+ */
 public class CadastroLocomotiva extends JDialog {
+        /** Botoes de salvar, limpar, fechar e de criar novo. */
+	private JButton bSalvar, bLimpar, bFechar, bNovo;
+        /** Campos para input de classe, bitola, comprimento e peso. */
+	private JTextField tClasse, tBitola, tComprimento, tPeso;
+	/** Descricao da locomotiva. */
+        private JTextArea txaDescricao;
+	/** Define as fontes para os botoes e para os textos. */
+        private Font fBotoes = new Font("Calibri", Font.BOLD, 20), fTexto = new Font("Calibri", Font.BOLD, 18);
+	/** Label para a classe, descricao, bitola, peso e comprimento. */
+        private JLabel lClasse, lDescricao, lBitola, lPeso, lComprimento;
 
-	private JButton bSalvar, bLimpar, bFechar, bNovo; // bot�o do formul�rio de cadastro de locomotiva
-
-	private JTextField tClasse, tBitola, tComprimento, tPeso; // text are do formul�rio de cadastro
-	private JTextArea txaDescricao;
-	private Font fBotoes = new Font("Calibri", Font.BOLD, 20), fTexto = new Font("Calibri", Font.BOLD, 18); // fontes
-	private JLabel lClasse, lDescricao, lBitola, lPeso, lComprimento;
-
-	public CadastroLocomotiva() { // construtor
+        /** Construtor da locomotiva. */
+	public CadastroLocomotiva() {
 		initComp();
 	}
 
+        /**
+         * Metodo que inicializa o componente.
+         */
 	public void initComp() {
 		setTitle("VLC - Cadastro de Locomotiva"); // titulo da janela
 
-		// paineis para setar a localiza��o dos componentes
+		// paineis para setar a localizacao dos componentes
 		JPanel cima = new JPanel();
 		JPanel centro = new JPanel();
 		JPanel baixo = new JPanel();
@@ -46,7 +58,7 @@ public class CadastroLocomotiva extends JDialog {
 		// centro
 		centro.setBorder(BorderFactory.createTitledBorder("Cadastro de Locomotiva")); // borda
 
-		// formlayout do formul�rio de cadastro
+		// formlayout do formulario de cadastro
 		FormLayout form = new FormLayout("130dlu, 20dlu, 100dlu, 3dlu", // colunas
 				"pref, 5dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu"); // linhas
 		CellConstraints cc = new CellConstraints();
@@ -69,12 +81,12 @@ public class CadastroLocomotiva extends JDialog {
 		centro.add(tComprimento = new JTextField(), cc.xy(3, 11));
 
 		// adicionando botoes no panel baixo
-		baixo.add(bNovo = new JButton("Novo"));// bot�o novo
-		baixo.add(bSalvar = new JButton("Salvar")); // bot�o de salvar o cadastro
-		baixo.add(bLimpar = new JButton("Limpar")); // bot�o limpar campos
-		baixo.add(bFechar = new JButton("Cancelar")); // bot�o cancelar
+		baixo.add(bNovo = new JButton("Novo"));// botao novo
+		baixo.add(bSalvar = new JButton("Salvar")); // botao de salvar o cadastro
+		baixo.add(bLimpar = new JButton("Limpar")); // botao limpar campos
+		baixo.add(bFechar = new JButton("Cancelar")); // botao cancelar
 
-		// setando a fonte dos bot�es
+		// setando a fonte dos botoes
 		bNovo.setFont(fBotoes);
 		bSalvar.setFont(fBotoes);
 		bLimpar.setFont(fBotoes);
@@ -103,9 +115,12 @@ public class CadastroLocomotiva extends JDialog {
 		setAutoRequestFocus(true);
 		setAlwaysOnTop(true);
 		setSize(500, 300); // tamanho
-		setLocationRelativeTo(null); // localizac�o
+		setLocationRelativeTo(null); // localizacao
 	}
 
+        /**
+         * Metodo para acionar acoes aos cliques de botoes.
+         */
 	public void eventoBotoes() {
 		bNovo.addActionListener((e) -> {
 			SwingUtilities.invokeLater(() -> {
@@ -186,7 +201,7 @@ public class CadastroLocomotiva extends JDialog {
                             }
                         });
 		});
-		bLimpar.addActionListener((e) -> { // actionListener do bot�o limparCampos
+		bLimpar.addActionListener((e) -> { // actionListener do botao limparCampos
 			SwingUtilities.invokeLater(() -> {
 				tBitola.setText("");
 				tClasse.setText("");

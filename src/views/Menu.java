@@ -39,21 +39,27 @@ import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings({"serial", "unused"})
-public class Menu extends Window {
 
+/** Classe de Menu que estende Window. */
+public class Menu extends Window {
+    
     private int total = 0;
     private int count = 0;
+    /** Variavel que carrega o resultado de uma consulta SQL. */
     private ResultSet set = null;
+    /** Variavel que carrega uma consulta SQL. */
     private Statement statement = null;
+    /** Conexao do banco de dados. */
     private static Connection conn = DB.getInstance().getConnection();
+    /** Instancia do objeto Menu. */
     private static Menu instance;
-
-    private JTabbedPane tab; // abas da janela de menu
-
+    /** Abas da janela. */
+    private JTabbedPane tab;
+    /** Os tipos das fontes para as abas, botoes e titulo. */
     private Font fAbas = new Font("Calibri", Font.BOLD, 22),
             fBotoes = new Font("Calibri", Font.BOLD, 20),
             fTitulo = new Font("Arial", Font.BOLD, 24); // fontes
-
+    /** Define os paineis das abas. */
     private JPanel panel1,
             panel2,
             panel3,
@@ -62,61 +68,68 @@ public class Menu extends Window {
             panel6,
             panel7,
             panel8,
-            panel9; // paineis das abas
-
+            panel9;
+    /** Define os botoes de cadastro, remocao, alteracao e exportacao de vagoes. */
     private JButton bCadastroVagao,
             bRemoverVagao,
             bAlterarVagao,
-            bExportarV; // aba 02 - vagões
-
+            bExportarV;
+    /** Define os botoes de cadastro, remocao, alteracao e exportacao de locomotivas. */
     private JButton bCadastroLocomotiva,
             bRemoverLocomotiva,
             bAlterarLocomotiva,
-            bExportarL; // aba 03 - locomotivas
-    
+            bExportarL;
+    /** Define o modelo da tabela. */
     private DefaultTableModel mcomps = new DefaultTableModel();
+    /** Tabela que carrega a lista de composicoes. */
     private JTable listaComposicoes;
+    /** Janela com scroll das composicoes. */
     private JScrollPane scrollPaneComposicoes;
+    /** Define os botoes de cadastro, remocao, alteracao e exportacao de composicoes. */
     private JButton bCadastroComp,
             bRemoverComp,
             bAlterarComp,
             bExportarC; // aba 04 - composições 
-
+    /** Botoes para os relatorios. */
     private JButton bRelVagao,
             bRelLocomotiva,
             bRelComp,
             bRelUsuario; // aba 05 - relatórios
-
+    /** Area de texto para os relatorios. */
     private JTextArea tRelatorios; // aba 05 - relatórios
-
+    /** Botao de pesquisa. */
     private JButton bPesquisar; // aba 07 - pesquisa
+    /** Area de texto para pesquisa. */
     private JTextField tPesquisar; // aba 07 - pesquisa
-
+    /** Botao de selecao unica para as configuracoes visuais. */
     private JRadioButton rbAluminium,
                          rbFast,
                          rbLuna,
                          rbTexture,
                          rbTamanho1,
                          rbTamanho2;// aba 08 - Configurações
-
+    /** Paineis de botoes. */
     private JPanel pBotoesV,
                    pBotoesL,
-                   pBotoesC; // paineis de botoes
-
+                   pBotoesC;
+    /**  */
     private static CellConstraints cc = new CellConstraints(); // pode deixar aqui ? momente
-
+    /** Construtor para iniciar o menu. */
     private Menu() {
         initComp();
     }
 
+    /** Metodo que busca uma unica instancia de menu, garantindo padrao Singleton. */
     public static Menu getInstance(){
         return (instance==null) ? new Menu() : instance;
     }
     
+    /** Deleta a instancia de menu. */
     public static void deleteInstance(){
         instance = null;
     }
     
+    /** Metodo que inicializa os componentes/menu. */
     private void initComp() {
         setTitle("VLC - Menu");
 
@@ -126,32 +139,32 @@ public class Menu extends Window {
 
         // As abas a seguir interagem com o banco de dados e precisam estar dentro de um bloco try catch.
         try {
-            aba02();// Aba 02 - Vagões
+            aba02();// Aba 02 - Vagoes
             aba03();// Aba 03 - Locomotivas
-            aba04();// Aba 04 - Composições
+            aba04();// Aba 04 - Composicoes
         } catch (SQLException sql) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro na conexão com o banco de dados. \n"
                     + sql.getMessage());
         }
 
-        aba05();// Aba 05 - Relatórios
+        aba05();// Aba 05 - Relatorios
 
-        aba06();// Aba 06 - Informações
+        aba06();// Aba 06 - Informacoes
 
         aba07();// Aba 07 - Pesquisa
 
-        aba08();// Aba 08 - Configurações
+        aba08();// Aba 08 - Configuracoes
 
-        tab.setTabPlacement(JTabbedPane.LEFT);// colocando as abas do lado esquerdo
+        tab.setTabPlacement(JTabbedPane.LEFT); // colocando as abas do lado esquerdo
 
-        // container da classe menu onde irï¿½ a aplicaï¿½ï¿½o
+        // container da classe menu onde iria a aplicacao
         Container cp = getContentPane();
         cp.add(tab);
 
         tab.setFont(fAbas); // setando fonte das abas
         tab.setFocusable(false);
         setSize(800, 600); // tamanho da janela
-        setLocationRelativeTo(null); // opï¿½ï¿½o para fazer a janela abrir no centro da tela
+        setLocationRelativeTo(null); // opcao para fazer a janela abrir no centro da tela
     }
 
     private void aba01() {
@@ -211,6 +224,7 @@ public class Menu extends Window {
         panel1.add(BorderLayout.CENTER, info); // Fim da Aba 01 - Home
     }
 
+    /** Aba 2. */
     private void aba02() throws SQLException {
         panel2 = new JPanel(); // painel
         panel2.setLayout(new BorderLayout()); // layout
@@ -224,7 +238,7 @@ public class Menu extends Window {
         titV.setHorizontalAlignment(SwingConstants.CENTER);
         panel2.add(BorderLayout.NORTH, titV);
 
-        // lista de vagÃµes
+        // lista de vagoes
         statement = conn.createStatement();
 
         set = statement.executeQuery("SELECT COUNT(*) FROM vagoes");
@@ -270,21 +284,22 @@ public class Menu extends Window {
         pBotoesV.add(bAlterarVagao = new JButton("Alterar"));
         pBotoesV.add(bExportarV = new JButton("Exportar dados"));
 
-        // seta a fonte dos botï¿½es da aba vagï¿½o
+        // seta a fonte dos botoes da aba vagao
         bCadastroVagao.setFont(fBotoes);
         bRemoverVagao.setFont(fBotoes);
         bAlterarVagao.setFont(fBotoes);
         bExportarV.setFont(fBotoes);
 
-        // evento dos botï¿½es
+        // evento dos botoes
         eventoVagoes();
 
         panel2.add(BorderLayout.SOUTH, pBotoesV); // panel final
         panel2 = new JPanel(); // painel
         panel2.setLayout(new BorderLayout()); // layout
 
-    }// Fim da Aba 02 - Vagoes
+    }
 
+    /** Aba 03. */
     private void aba03() throws SQLException {
         panel3 = new JPanel();
         panel3.setLayout(new BorderLayout());
@@ -348,13 +363,14 @@ public class Menu extends Window {
         bAlterarLocomotiva.setFont(fBotoes);
         bExportarL.setFont(fBotoes);
 
-        // evento dos botï¿½es
+        // evento dos botoes
         eventoLocomotiva();
 
         panel3.add(BorderLayout.SOUTH, pBotoesL); // panel final
-        // Fim da Aba 03 - Locomotivas
+        
     }
 
+    /** Aba 04. */
     private void aba04() throws SQLException {
         
         panel4 = new JPanel();
@@ -394,8 +410,9 @@ public class Menu extends Window {
 
         panel4.add(BorderLayout.SOUTH, pBotoesC);
 
-    } // Fim da Aba 04 - Composicoes
+    }
 
+    /** Aba 05. */
     private void aba05() {
         panel5 = new JPanel();
         panel5.setLayout(new BorderLayout());
@@ -415,7 +432,7 @@ public class Menu extends Window {
         sp.setHorizontalScrollBarPolicy((JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)); // barra de rolagem horizontal
 
         FormLayout relLayout = new FormLayout("1dlu, 1dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu", // colunas
-                "1dlu, 1dlu, pref, 5dlu, fill:275dlu, 2dlu"); // linas
+                "1dlu, 1dlu, pref, 5dlu, fill:275dlu, 2dlu"); // linhas
         relatorio.setLayout(relLayout);
 
         // colocando os campos no formlayout
@@ -425,7 +442,7 @@ public class Menu extends Window {
         relatorio.add(bRelUsuario = new JButton("<html> Relatório de<br/> Usuários </html>"), cc.xy(9, 3));
         relatorio.add(sp, cc.xyw(3, 5, 7));
 
-        // redefinindo tamanho dos botões
+        // redefinindo tamanho dos botoes
         bRelVagao.setPreferredSize(new Dimension(142, 75));
         bRelLocomotiva.setPreferredSize(new Dimension(142, 75));
         bRelComp.setPreferredSize(new Dimension(142, 75));
@@ -437,24 +454,25 @@ public class Menu extends Window {
         bRelComp.setFont(fBotoes);
         bRelUsuario.setFont(fBotoes);
 
-        // desativando o setfocusable dos botões
+        // desativando o setfocusable dos botoes
         bRelVagao.setFocusable(false);
         bRelLocomotiva.setFocusable(false);
         bRelComp.setFocusable(false);
         bRelUsuario.setFocusable(false);
 
-        eventoRelatorio(); // eventos dos botões
+        eventoRelatorio(); // eventos dos botoes
 
         panel5.add(BorderLayout.NORTH, titRel); // adicionando titulo
         panel5.add(BorderLayout.CENTER, relatorio);
-    } // fim da aba 05
+    }
 
+    /** Aba 06. */
     private void aba06() {
         panel6 = new JPanel();
         panel6.setLayout(new BorderLayout()); // layout do panel
 
         Icon informacoes = new ImageIcon(getClass().getResource("../resources/images/informações.png")); // icone da aba
-        addTab(tab, panel6, "Informações    ", informacoes); // fim da aba 06
+        addTab(tab, panel6, "Informações    ", informacoes);
 
         JLabel titInfo = new JLabel("Informações sobre vagões");
         titInfo.setFont(fTitulo); // fonte do titulo
@@ -469,10 +487,11 @@ public class Menu extends Window {
 
         tnc.add(spInfo);
         panel6.add(BorderLayout.NORTH, titInfo);
-        panel6.add(BorderLayout.CENTER, tnc);// fim da aba 06 - informacoes
+        panel6.add(BorderLayout.CENTER, tnc);
 
     }
 
+    /** Aba 07. */
     private void aba07() {
         panel7 = new JPanel();
         Icon pesquisar = new ImageIcon(getClass().getResource("../resources/images/pesquisar.png"));
@@ -565,9 +584,10 @@ public class Menu extends Window {
                 panel7.repaint();
             });
         });
-        // fim da aba 07
+        
     }
 
+    /** Aba 08. */
     private void aba08() {
         panel8 = new JPanel();
         panel8.setLayout(new BorderLayout());
@@ -619,108 +639,120 @@ public class Menu extends Window {
         tudo.add(tamanho);
 
         panel8.add(BorderLayout.NORTH, configuracoes);
-        panel8.add(BorderLayout.CENTER, tudo); // fim da aba 08
+        panel8.add(BorderLayout.CENTER, tudo);
     }
 
-    // eventos dos botões da aba vagão
+    /** Eventos dos botoes da aba vagao. */
     private void eventoVagoes() {
-        bCadastroVagao.addActionListener((e) -> { // actionListener do botï¿½o de cadastrar
+        bCadastroVagao.addActionListener((e) -> { // actionListener do botao de cadastrar
             SwingUtilities.invokeLater(() -> {
                 CadastroVagao v1 = new CadastroVagao();
                 v1.setVisible(true);
             });
         });
 
-        bRemoverVagao.addActionListener((e) -> {// actionListener do botï¿½o de remover
+        bRemoverVagao.addActionListener((e) -> {// actionListener do botao de remover
             SwingUtilities.invokeLater(() -> {
                 RemoveVagao ll = new RemoveVagao();
                 ll.setVisible(true);
             });
         });
 
-        bAlterarVagao.addActionListener((e) -> {// actionListener do botï¿½o de alterar
+        bAlterarVagao.addActionListener((e) -> {// actionListener do botao de alterar
             SwingUtilities.invokeLater(() -> {
 
             });
         });
 
-        bExportarV.addActionListener((e) -> {// actionListener do botï¿½o de exportar
+        bExportarV.addActionListener((e) -> {// actionListener do botao de exportar
             SwingUtilities.invokeLater(() -> {
 
             });
         });
     }
 
-    // eventos dos botï¿½es da aba locomotiva
+    /** Eventos dos botoes da aba locomotiva. */
     private void eventoLocomotiva() {
-        bCadastroLocomotiva.addActionListener((e) -> { // actionListener do botï¿½o de Cadastrar
+        bCadastroLocomotiva.addActionListener((e) -> { // actionListener do botao de Cadastrar
             SwingUtilities.invokeLater(() -> {
                 CadastroLocomotiva l1 = new CadastroLocomotiva();
                 l1.setVisible(true);
             });
         });
 
-        bRemoverLocomotiva.addActionListener((e) -> { // actionListener do botÃ£o de Remover
+        bRemoverLocomotiva.addActionListener((e) -> { // actionListener do botao de Remover
             SwingUtilities.invokeLater(() -> {
                 RemoveLocomotiva ll = new RemoveLocomotiva();
                 ll.setVisible(true);
             });
         });
 
-        bAlterarLocomotiva.addActionListener((e) -> { // actionListener do botï¿½o de Alterar
+        bAlterarLocomotiva.addActionListener((e) -> { // actionListener do botao de Alterar
             SwingUtilities.invokeLater(() -> {
             });
         });
 
-        bExportarL.addActionListener((e) -> { // actionListener do botÃ£o de Exportar
+        bExportarL.addActionListener((e) -> { // actionListener do botao de Exportar
             SwingUtilities.invokeLater(() -> {
             });
         });
     }
 
-    // eventos dos botões da aba locomotiva
+    /** Eventos dos botoes da aba locomotiva. */
     private void eventoComposicao() {
-        bCadastroComp.addActionListener((e) -> { // actionListener do botÃ£o de Cadastrar
+        bCadastroComp.addActionListener((e) -> { // actionListener do botao de Cadastrar
             SwingUtilities.invokeLater(() -> {
                 CadastroComposicao l1 = new CadastroComposicao();
                 l1.setVisible(true);                  
             });
         });
 
-        bRemoverComp.addActionListener((e) -> { // actionListener do botÃ£o de Remover
+        bRemoverComp.addActionListener((e) -> { // actionListener do botao de Remover
             SwingUtilities.invokeLater(() -> {
             });
         });
 
-        bAlterarComp.addActionListener((e) -> { // actionListener do botÃ£o de cadastrar
+        bAlterarComp.addActionListener((e) -> { // actionListener do botao de cadastrar
             SwingUtilities.invokeLater(() -> {
             });
         });
 
-        bExportarC.addActionListener((e) -> { // actionListener do botÃ£o de cadastrar
+        bExportarC.addActionListener((e) -> { // actionListener do botao de cadastrar
             SwingUtilities.invokeLater(() -> {                
             });
         });
     }
 
     private void eventoRelatorio() {
-        bRelVagao.addActionListener((e) -> { // actionListener do botão de exportar
+        bRelVagao.addActionListener((e) -> { // actionListener do botao de exportar
             // coloca o codigo aqui viado
         });
 
-        bRelLocomotiva.addActionListener((e) -> { // actionListener do botão de exportar
+        bRelLocomotiva.addActionListener((e) -> { // actionListener do botao de exportar
             // coloca o codigo aqui viado
         });
 
-        bRelComp.addActionListener((e) -> { // actionListener do botão de exportar
+        bRelComp.addActionListener((e) -> { // actionListener do botao de exportar
             // coloca o codigo aqui viado
         });
 
-        bRelUsuario.addActionListener((e) -> { // actionListener do botão de exportar
+        bRelUsuario.addActionListener((e) -> { // actionListener do botao de exportar
             // coloca o codigo aqui viado
         });
     }
 
+    /**
+     * Metodo que adiciona uma aba
+     * 
+     * @param tabbedPane
+     *                     aba do tipo tabbedPane
+     * @param tab
+     *              componente que comporá a aba
+     * @param title
+     *                titulo da aba
+     * @param icon
+     *               icone
+     */
     private void addTab(JTabbedPane tabbedPane, Component tab, String title, Icon icon) {
         tabbedPane.add(tab);
 
@@ -733,12 +765,17 @@ public class Menu extends Window {
         tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, lbl);
     }
     
-    // Leo
+    /**
+     * Metodo para atualizar composicoes.
+     */
     public void atualizarComposicoes() {
         carregarComposicoes();
         Login.reload();
     } 
     
+    /**
+     * Metodo para carregar todas as composicoes.
+     */
     private void carregarComposicoes(){
         try{                        
             statement = conn.createStatement();

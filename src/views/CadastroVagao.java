@@ -19,36 +19,50 @@ import models.Vagao;
 
 @SuppressWarnings({"serial", "unused"})
 
+/**
+ * Classe que estende JFrame e cadastra vagoes.
+ * 
+ * @author Antonignoni Cesar
+ */
 public class CadastroVagao extends JDialog {
-
+    /** Instancia de Helper para auxilio na execucacao das funcoes. */
     private Helper helper = new Helper();
-
-    private JButton bSalvar, bLimpar, bFechar, bNovo; // bot�es do formul�rio de cadastro
-    private JComboBox<String> tipo; // comboBox para tipo de vag�o
-    private JComboBox<String> subTipo; // comboBox para suTtipo de vag�o
-    private JComboBox<String> bitola; // comboBox para suTtipo de vag�o
+    /** Botoes de salvar, limpar, fechar e novo. */
+    private JButton bSalvar, bLimpar, bFechar, bNovo;
+    /** Tipo de vagao. */
+    private JComboBox<String> tipo;
+    /** Subtipo do vagao. */
+    private JComboBox<String> subTipo;
+    /** Bitola do vagao. */
+    private JComboBox<String> bitola;
+    /** Campo para input de proprietario. */
     private JTextField proprietario;
+    /** Campos para input de serie e digito. */
     private JTextField serie, digito;
-
+    /** Define as fontes para os botoes e para o formulario. */
     private Font fBotoes = new Font("Calibri", Font.BOLD, 20),
             fCombo = new Font("Calibri", Font.BOLD, 18),
             fInfo = new Font("Calibri", Font.BOLD, 16); // fontes
 
-    public CadastroVagao() {// construtor
+    /** Construtor para cadastrar vagao. */
+    public CadastroVagao() {
         initComp();
     }
 
+    /**
+     * Metodo que inicializa o componente.
+     */
     public void initComp() {
         setTitle("VLC - Cadastro de Vagão"); // titulo da janela
 
-        // Preenchendo os valores com as informações já especificadas
+        // preenchendo os valores com as informações já especificadas
         String[] tipoVagao = helper.getTipos();
 
         String[] subTipoVagao = {};
 
         String[] bitolaTipos = helper.getPmas();
 
-        // paineis para setar a localiza��o dos componentes
+        // paineis para setar a localizacao dos componentes
         JPanel cima = new JPanel();
         JPanel centro = new JPanel();
         JPanel baixo = new JPanel();
@@ -72,7 +86,7 @@ public class CadastroVagao extends JDialog {
         centro.setLayout(form);
         CellConstraints cc = new CellConstraints();
 
-//                // adicionando as parada ******
+//      // adicionando os itens do componente
         centro.add(tipo = new JComboBox<>(tipoVagao), cc.xy(3, 3));
         tipo.setFont(fCombo);
         tipo.setToolTipText("Tipo do vagão");
@@ -118,7 +132,7 @@ public class CadastroVagao extends JDialog {
         JLabel infoBitola = new JLabel("Tamanho da bitola: ");
         infoBitola.setFont(fInfo);
 
-        // formlayout das mensagens de informação
+        // formlayout das mensagens de informacao
         FormLayout informacoes = new FormLayout("pref, 3dlu", // colunas
                 "12dlu, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu"); // linhas
 
@@ -132,16 +146,16 @@ public class CadastroVagao extends JDialog {
         grid.add(centro);
         grid.add(info);
 
-        // bot�es inferiores
-        baixo.add(bNovo = new JButton("Novo")); // bot�o novo
-        baixo.add(bSalvar = new JButton("Salvar")); // bot�o de salvar o cadastro
-        baixo.add(bLimpar = new JButton("Limpar")); // bot�o limpar campos
-        baixo.add(bFechar = new JButton("Cancelar"));// bot�o cancelar
+        // botoes inferiores
+        baixo.add(bNovo = new JButton("Novo")); // botao novo
+        baixo.add(bSalvar = new JButton("Salvar")); // botao de salvar o cadastro
+        baixo.add(bLimpar = new JButton("Limpar")); // botao limpar campos
+        baixo.add(bFechar = new JButton("Cancelar"));// botao cancelar
 
-        // evento dos bot�es
+        // evento dos botoes
         eventoBotoes();
 
-        // setando a fonte dos bot�es
+        // setando a fonte dos botoes
         bSalvar.setFont(fBotoes);
         bLimpar.setFont(fBotoes);
         bNovo.setFont(fBotoes);
@@ -171,9 +185,12 @@ public class CadastroVagao extends JDialog {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Metodo que inicializa os eventos dos botoes.
+     */
     public void eventoBotoes() {
 
-        bSalvar.addActionListener((e) -> { // Salvar vagão, alterar
+        bSalvar.addActionListener((e) -> { // salvar vagao, alterar
             SwingUtilities.invokeLater(() -> {
                 if (!temErroNoVagao()) {
                     JOptionPane.showMessageDialog(this,
@@ -199,7 +216,7 @@ public class CadastroVagao extends JDialog {
             });
         });
 
-        bNovo.addActionListener((e) -> { // Criar novo vagão
+        bNovo.addActionListener((e) -> { // Criar novo vagao
             SwingUtilities.invokeLater(() -> {
                 if (!temErroNoVagao()) {
 
@@ -219,20 +236,21 @@ public class CadastroVagao extends JDialog {
             });
         });
 
-        bLimpar.addActionListener((e) -> { // actionListener do bot�o limparCampos
+        bLimpar.addActionListener((e) -> { // actionListener do botao limparCampos
             SwingUtilities.invokeLater(() -> {
                 limpar();
             });
         });
 
-        bFechar.addActionListener((e) -> { // Fechar
+        bFechar.addActionListener((e) -> { // fechar
             dispose();
         }); // fim dos eventos
     }
 
     /**
-     *
-     * @return
+     * Metodo que varre o vagao e verifica se ha alguma incompatibiladade.
+     * 
+     * @return string contendo descricao verbal do erro
      */
     private boolean temErroNoVagao() {
         String erro = "";
@@ -258,7 +276,7 @@ public class CadastroVagao extends JDialog {
         }
 
         if (erro.isEmpty()) {
-            return false; // Não tem erro no vagão
+            return false; // nao tem erro no vagao
         }
 
         JOptionPane.showMessageDialog(this, erro, "Error", JOptionPane.ERROR_MESSAGE);
@@ -266,7 +284,7 @@ public class CadastroVagao extends JDialog {
     }
 
     /**
-     * Limpa a tela
+     * Metodo usado para limpar os campos da tela.
      */
     private void limpar() {
         tipo.setSelectedItem("");

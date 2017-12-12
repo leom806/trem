@@ -6,12 +6,18 @@ import java.awt.event.WindowAdapter;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
+/** Classe de Janela que estende JFrame e passa parametros e acoes para ela. */
 public class Window extends JFrame {
-
+    /** Construtor padrao da janela. */
     public Window() {
         this("");
     }
 
+    /**
+     * Construtor especifico da janela
+     * @param title
+     *                titulo para a janela
+     */
     public Window(String title) {
         super(title);
         setResizable(false);
