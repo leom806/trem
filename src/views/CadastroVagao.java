@@ -67,19 +67,18 @@ public class CadastroVagao extends JDialog {
         centro.add(tipo = new JComboBox<>(tipoVagao)); // combobox de opções
 
         FormLayout form = new FormLayout(
-                "65dlu, 3dlu, 40dlu, 1dlu, 40dlu, 1dlu, 40dlu, 20dlu, 50dlu, 5dlu, 20dlu, 1dlu", // colunas
+                "65dlu, 3dlu, 80dlu, 1dlu, 40dlu, 1dlu, 40dlu, 20dlu, 50dlu, 5dlu, 20dlu, 1dlu", // colunas
                 "17dlu, 3dlu, 20dlu, pref, 3dlu"); // linhas
         centro.setLayout(form);
         CellConstraints cc = new CellConstraints();
 
-//                // adicionando as parada ******
+        
         centro.add(tipo = new JComboBox<>(tipoVagao), cc.xy(3, 3));
         tipo.setFont(fCombo);
         tipo.setToolTipText("Tipo do vagão");
         tipo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Tipo value = helper.getTipoByName(tipo.getSelectedItem().toString());
-
                 ArrayList<Subtipo> subtipos = helper.getSubtipos(value);
 
                 if (subtipos != null) {
@@ -94,7 +93,7 @@ public class CadastroVagao extends JDialog {
 
         centro.add(subTipo = new JComboBox<>(subTipoVagao), cc.xy(5, 3));
         subTipo.setFont(fCombo);
-        subTipo.setToolTipText("SubTipo do vagão");
+        subTipo.setToolTipText("SubTipo do vagão");        
 
         centro.add(bitola = new JComboBox<>(bitolaTipos), cc.xy(7, 3));
         bitola.setFont(fCombo);
@@ -106,32 +105,14 @@ public class CadastroVagao extends JDialog {
 
         centro.add(digito = new JTextField(), cc.xy(11, 3));
         digito.setFont(fCombo);
-        digito.setToolTipText("Digite o dígito verificador do vag�o");
-
-        // teste ***apagar dps
-        JPanel info = new JPanel();
-        info.setBorder(BorderFactory.createTitledBorder("Informações"));
-        JLabel infoTipo = new JLabel("Tipo:");
-        infoTipo.setFont(fInfo);
-        JLabel infoSubTipo = new JLabel("Subtipo: ");
-        infoSubTipo.setFont(fInfo);
-        JLabel infoBitola = new JLabel("Tamanho da bitola: ");
-        infoBitola.setFont(fInfo);
+        digito.setToolTipText("Digite o dígito verificador do vagão");        
 
         // formlayout das mensagens de informação
         FormLayout informacoes = new FormLayout("pref, 3dlu", // colunas
                 "12dlu, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu"); // linhas
 
-        info.setLayout(informacoes);
-
-        info.add(infoTipo, cc.xy(1, 3));
-        info.add(infoSubTipo, cc.xy(1, 5));
-        info.add(infoBitola, cc.xy(1, 7));
-
         // adicionando o painel do centro no gridlayout
         grid.add(centro);
-        grid.add(info);
-
         // bot�es inferiores
         baixo.add(bNovo = new JButton("Novo")); // bot�o novo
         baixo.add(bSalvar = new JButton("Salvar")); // bot�o de salvar o cadastro

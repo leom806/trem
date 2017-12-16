@@ -41,7 +41,7 @@ public class Locomotiva implements DBObject, ElementoComposicao{
                 ",\n descricao:    " + descricao + 
                 ",\n peso max reb: " + pmr + "t" +
                 ",\n comprimento:  " + comprimento + "m" + 
-                ",\n bitola:       " + bitola + "m";
+                ",\n bitola:       " + bitola + "m" + "\n}\n";
     }
     
     public String getProperties(){

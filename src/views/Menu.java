@@ -38,7 +38,10 @@ import helpers.Helper;
 import java.awt.IllegalComponentStateException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import models.Locomotiva;
+import models.Vagao;
 
 @SuppressWarnings({"serial", "unused"})
 public class Menu extends Window {
@@ -85,9 +88,7 @@ public class Menu extends Window {
                     bExportarC; // aba 04 - composições 
 
     private JButton bRelVagao,
-                    bRelLocomotiva,
-                    bRelComp,
-                    bRelUsuario; // aba 05 - relatórios
+                    bRelLocomotiva; // aba 05 - relatórios
 
     private JTextArea tRelatorios; // aba 05 - relatórios
 
@@ -158,7 +159,7 @@ public class Menu extends Window {
 
         aba05();// Aba 05 - Relatórios
 
-        aba06();// Aba 06 - Informações
+//        aba06();// Aba 06 - Informações
 
         aba07();// Aba 07 - Pesquisa
 
@@ -196,11 +197,11 @@ public class Menu extends Window {
         SimpleDateFormat sdfData = new SimpleDateFormat(data); // data
         SimpleDateFormat sdfHora = new SimpleDateFormat(horario); // hora
 
-        JLabel usuario = new JLabel("Usuário: " + "GiroPiroka"); // troca aqui hein
-        JLabel nome = new JLabel("Nome: " + "giro"); // troca aqui 2
-        JLabel numFuncionario = new JLabel("Nº do funcionário: " + "696969");// troca aqui tambem
-        JLabel setor = new JLabel("Setor: " + "putaria"); // troca aqui hein, n vai esquecer
-        JLabel cargo = new JLabel("Cargo: " + "gigolô"); // esse tb
+        JLabel usuario = new JLabel("Usuário: " + "gsilva"); // troca aqui hein
+        JLabel nome = new JLabel("Nome: " + "adm"); // troca aqui 2
+        JLabel numFuncionario = new JLabel("Nº do funcionário: " + "01254145");// troca aqui tambem
+        JLabel setor = new JLabel("Setor: " + "Administração"); // troca aqui hein, n vai esquecer
+        JLabel cargo = new JLabel("Cargo: " + "Gerente"); // esse tb
 
         JLabel hora = new JLabel("Hora: " + sdfHora.format(new Date()));
         JLabel dia = new JLabel("Data: " + sdfData.format(new Date()));
@@ -431,34 +432,27 @@ public class Menu extends Window {
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // barra de rolagem vertical
         sp.setHorizontalScrollBarPolicy((JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)); // barra de rolagem horizontal
 
-        FormLayout relLayout = new FormLayout("1dlu, 1dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu", // colunas
+        FormLayout relLayout = new FormLayout("1dlu, 1dlu, pref, 2dlu, pref, 2dlu, pref, 2dlu:grow, pref, 2dlu", // colunas
                 "1dlu, 1dlu, pref, 5dlu, fill:275dlu, 2dlu"); // linas
         relatorio.setLayout(relLayout);
 
         // colocando os campos no formlayout
         relatorio.add(bRelVagao = new JButton("<html> Relatório de<br/> Vagões </html>"), cc.xy(3, 3));
         relatorio.add(bRelLocomotiva = new JButton("<html> Relatório de <br/> Locomotivas </html>"), cc.xy(5, 3));
-        relatorio.add(bRelComp = new JButton("<html> Relatório de<br/> Composições </html>"), cc.xy(7, 3));
-        relatorio.add(bRelUsuario = new JButton("<html> Relatório de<br/> Usuários </html>"), cc.xy(9, 3));
+
         relatorio.add(sp, cc.xyw(3, 5, 7));
 
         // redefinindo tamanho dos botões
         bRelVagao.setPreferredSize(new Dimension(142, 75));
         bRelLocomotiva.setPreferredSize(new Dimension(142, 75));
-        bRelComp.setPreferredSize(new Dimension(142, 75));
-        bRelUsuario.setPreferredSize(new Dimension(142, 75));
-
+        
         // fontes
         bRelVagao.setFont(fBotoes);
         bRelLocomotiva.setFont(fBotoes);
-        bRelComp.setFont(fBotoes);
-        bRelUsuario.setFont(fBotoes);
 
         // desativando o setfocusable dos botões
         bRelVagao.setFocusable(false);
         bRelLocomotiva.setFocusable(false);
-        bRelComp.setFocusable(false);
-        bRelUsuario.setFocusable(false);
 
         eventoRelatorio(); // eventos dos botões
 
@@ -466,28 +460,28 @@ public class Menu extends Window {
         panel5.add(BorderLayout.CENTER, relatorio);
     } // Fim da Aba 05 - Relatórios
 
-    private void aba06() {
-        panel6 = new JPanel();
-        panel6.setLayout(new BorderLayout()); // layout do panel
-
-        addTab(tab, panel6, "Informações    ", informacoes); // fim da aba 06
-
-        JLabel titInfo = new JLabel("Informações sobre vagões");
-        titInfo.setFont(fTitulo); // fonte do titulo
-        titInfo.setHorizontalAlignment(SwingConstants.CENTER); // alinhamento de texto
-
-        JPanel tnc = new JPanel();
-        JLabel teste = new JLabel();
-        JScrollPane spInfo = new JScrollPane();
-
-        teste.setIcon(new ImageIcon("../resources/images/info.png"));
-        spInfo.setViewportView(teste);
-
-        tnc.add(spInfo);
-        panel6.add(BorderLayout.NORTH, titInfo);
-        panel6.add(BorderLayout.CENTER, tnc);// fim da aba 06 - informacoes
-
-    } // Fim da Aba 06 - Informações
+//    private void aba06() {
+//        panel6 = new JPanel();
+//        panel6.setLayout(new BorderLayout()); // layout do panel
+//
+//        addTab(tab, panel6, "Informações    ", informacoes); // fim da aba 06
+//
+//        JLabel titInfo = new JLabel("Informações sobre vagões");
+//        titInfo.setFont(fTitulo); // fonte do titulo
+//        titInfo.setHorizontalAlignment(SwingConstants.CENTER); // alinhamento de texto
+//
+//        JPanel tnc = new JPanel();
+//        JLabel teste = new JLabel();
+//        JScrollPane spInfo = new JScrollPane();
+//
+//        teste.setIcon(new ImageIcon("../resources/images/info.png"));
+//        spInfo.setViewportView(teste);
+//
+//        tnc.add(spInfo);
+//        panel6.add(BorderLayout.NORTH, titInfo);
+//        panel6.add(BorderLayout.CENTER, tnc);// fim da aba 06 - informacoes
+//
+//    } // Fim da Aba 06 - Informações
 
     private void aba07() {
         panel7 = new JPanel();
@@ -658,7 +652,7 @@ public class Menu extends Window {
 
         bAlterarVagao.addActionListener((e) -> {// actionListener do botï¿½o de alterar
             SwingUtilities.invokeLater(() -> {
-
+                
             });
         });
 
@@ -721,20 +715,21 @@ public class Menu extends Window {
 
     private void eventoRelatorio() {
         bRelVagao.addActionListener((e) -> { // actionListener do botão de exportar
-            // coloca o codigo aqui viado
+            ArrayList<Vagao> vagoes = Vagao.getAll();
+            tRelatorios.setText("--- Relatório de Vagões ---\n\n");
+            vagoes.forEach((v)->{
+                tRelatorios.append(v.toString()+"\n");
+            });
         });
 
         bRelLocomotiva.addActionListener((e) -> { // actionListener do botão de exportar
-            // coloca o codigo aqui viado
+            ArrayList<Locomotiva> locs = Locomotiva.getAll();
+            tRelatorios.setText("--- Relatório de Locomotivas ---\n\n");
+            locs.forEach((l)->{
+                tRelatorios.append(l.toString()+"\n");
+            });
         });
 
-        bRelComp.addActionListener((e) -> { // actionListener do botão de exportar
-            // coloca o codigo aqui viado
-        });
-
-        bRelUsuario.addActionListener((e) -> { // actionListener do botão de exportar
-            // coloca o codigo aqui viado
-        });
     }
 
     private void eventosConfiguracoes(){
